@@ -1,0 +1,36 @@
+{
+  "name": "bot-quality-monitor",
+  "version": "2.1.0",
+  "description": "OpenClaw Bot 质量监控 Skill 体系 - 自动化监控 Bot 使用质量，提供数据驱动的优化建议",
+  "author": "小炸弹 💣",
+  "license": "MIT",
+  "keywords": [
+    "bot",
+    "quality",
+    "monitoring",
+    "analytics",
+    "dashboard",
+    "feishu",
+    "openclaw"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openclaw/skills"
+  },
+  "dependencies": {},
+  "openclaw": {
+    "minVersion": "2026.3.8"
+  },
+  "skills": [
+    "bot-analytics-collector",
+    "bot-daily-report",
+    "bot-platform-insights"
+  ],
+  "scripts": {
+    "init": "scripts/init.sh",
+    "create-tables": "python3 scripts/create-tables.py",
+    "daily-report": "scripts/daily-report.sh",
+    "weekly-insights": "scripts/weekly-insights.sh",
+    "generate-dashboard": "python3 scripts/generate-dashboard.py"
+  }
+}

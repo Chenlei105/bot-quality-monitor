@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # 触发条件：推送 v* 标签（如 v2.1.0）
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      
+      - name: Create release archive
+        run: |
+          # 创建临时目录
+          mkdir -p dist/bot-quality-monitor
+          
+          # 复制所有文件（排除 .git 和 .github）
+          rsync -av --exclude='.git' --exclude='.github' --exclude='dist' . dist/bot-quality-monitor/
+          
+          # 打包
+          cd dist
+          tar -czf bot-quality-monitor-${{ steps.get_version.outputs.VERSION }}.tar.gz bot-quality-monitor/
+          
+          # 生成 SHA256
+          sha256sum bot-quality-monitor-${{ steps.get_version.outputs.VERSION }}.tar.gz > bot-quality-monitor-${{ steps.get_version.outputs.VERSION }}.tar.gz.sha256
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release v${{ steps.get_version.outputs.VERSION }}
+          body_path: CHANGELOG.md
+          files: |
+            dist/bot-quality-monitor-${{ steps.get_version.outputs.VERSION }}.tar.gz
+            dist/bot-quality-monitor-${{ steps.get_version.outputs.VERSION }}.tar.gz.sha256
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Update latest tag
+        run: |
+          git tag -f latest
+          git push -f origin latest
