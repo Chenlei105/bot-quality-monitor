@@ -1,220 +1,202 @@
 # Bot Quality Monitor 安装指南
 
-**版本**: v3.0  
-**更新时间**: 2026-03-24
+**5 分钟快速上手，让你的 Bot 更智能！**
 
 ---
 
-## 🎯 功能简介
+## 📋 前提条件
 
-Bot Quality Monitor 是一个智能的 Bot 健康监控系统，帮助您：
-
-- 📊 **每日自动监控**：自动采集您所有 Bot 的对话数据
-- 🔔 **智能预警提示**：发现问题自动提醒 (高分低用、低分高风险、高风险场景)
-- 💡 **明确改进建议**：失败案例给出具体的 Prompt 优化、模型推荐、Skill 推荐
-- 📈 **可视化报告**：每日推送健康度报告 + 交互式 Dashboard
+- ✅ 已安装 OpenClaw（[安装指南](https://docs.openclaw.ai)）
+- ✅ 已配置飞书机器人（或其他支持的平台）
+- ✅ 飞书账号（企业版或个人版均可）
 
 ---
 
-## 📋 安装步骤
+## 🚀 快速安装
 
-### Step 1: 安装 Skill
-
-在 OpenClaw CLI 中执行：
+### 方式一：一键安装（推荐）
 
 ```bash
 openclaw skill install bot-quality-monitor
 ```
 
-或通过 skillhub 搜索安装：
+安装完成后，所有子 Skill 会自动安装：
+- `bot-analytics-collector` - 数据采集
+- `bot-daily-report` - 日报生成
+- `bot-platform-insights` - 平台洞察
+
+### 方式二：从 GitHub 安装
 
 ```bash
-openclaw skill search "bot quality monitor"
-openclaw skill install bot-quality-monitor
+# 克隆仓库
+git clone https://github.com/Chenlei105/bot-quality-monitor.git
+
+# 复制到 OpenClaw skills 目录
+cp -r bot-quality-monitor ~/.openclaw/workspace/skills/
+cp -r bot-quality-monitor/bot-analytics-collector ~/.openclaw/workspace/skills/
+cp -r bot-quality-monitor/bot-daily-report ~/.openclaw/workspace/skills/
+cp -r bot-quality-monitor/bot-platform-insights ~/.openclaw/workspace/skills/
 ```
 
 ---
 
-### Step 2: 授权飞书权限
+## ⚙️ 首次配置
 
-安装后会自动触发授权流程，您需要授权以下权限：
+### Step 1: 创建数据中台
 
-**必需权限**:
-- ✅ `im:message` - 读取对话消息 (用于采集数据)
-- ✅ `im:message:send_as_bot` - 发送日报
-- ✅ `bitable:app` - 读写多维表格 (存储数据)
+首次使用时，需要创建飞书多维表格来存储数据：
 
-**可选权限**:
-- ⚪ `calendar:calendar` - 日历事件 (未来功能)
+1. 打开飞书，创建一个新的多维表格
+2. 记下表格的 App Token（从 URL 获取，格式如 `Xw4Tb5C8KagMiQswkdacNfVPn8e`）
+3. 在表格中创建以下数据表：
 
-**授权方式**:
+| 表名 | 用途 |
+|------|------|
+| L1_消息明细表 | 存储每条消息 |
+| L2_会话汇总表 | 存储会话汇总 |
+| L3_每日指标汇总 | Bot 排行榜 |
+| L3_Signal_Alerts | 智能信号 |
+| L3_Skill_ROI | Skill 性价比 |
+| L3_Skill_Run | 多 Skill 协作记录 |
 
-1. 点击授权链接 (安装时自动推送)
-2. 在飞书中确认授权
-3. 完成！
+> 💡 **提示**：可以让 Bot 帮你自动创建这些表，只需说"帮我创建 Bot 质量监控的数据表"
 
----
+### Step 2: 配置连接信息
 
-### Step 3: 配置数据采集
-
-授权完成后，Skill 会自动开始采集您的 Bot 对话数据。
-
-**采集范围**:
-- 所有您创建的 Bot
-- 所有对话渠道 (私聊/群聊)
-- 所有消息类型
-
-**隐私保护**:
-- ✅ 数据完全隔离 (您只能看到自己的数据)
-- ✅ 不会采集其他用户的数据
-- ✅ 不会泄露您的对话内容
-
----
-
-### Step 4: 接收日报
-
-配置完成后，每天 **22:00** 您会收到一份个性化日报，包含：
-
-1. **综合健康度** (0-100 分)
-2. **核心指标趋势** (纠错率、首解率、完成率)
-3. **三类智能信号** (高分低用、低分高风险、高风险场景)
-4. **失败案例诊断** (根因分析 + 改进建议)
-5. **Skill ROI 排行** (哪些 Skill 性价比最高)
-
----
-
-## 🎨 Dashboard 使用
-
-### 查看 Dashboard
-
-发送消息给 Bot:
-
-```
-/dashboard
-```
-
-或在日报卡片中点击"查看 Dashboard"按钮。
-
-### Dashboard 包含
-
-1. **📊 综合健康度仪表盘** - 当前健康度 + 7 天趋势
-2. **📈 核心指标折线图** - 纠错率、首解率、完成率
-3. **🎨 场景健康度热力图** - 各场景表现对比
-4. **🔔 三类智能信号** - 需要关注的问题
-5. **📋 失败案例 Top 10** - 具体诊断 + 改进建议
-
----
-
-## 💡 智能诊断示例
-
-### 示例 1: Prompt 优化
-
-**失败案例**:
-```
-用户: 帮我写文档
-Bot: [输出为空]
-```
-
-**智能诊断**:
-```
-🔍 根因: Prompt 过于模糊 (置信度 85%)
-
-💡 改进建议:
-❌ 原 Prompt: "帮我写文档"
-✅ 优化 Prompt: "帮我写一份产品需求文档 PRD，包含:
-   - 项目背景
-   - 核心目标
-   - 功能列表 (5-10个)
-   全文 2000 字左右"
-
-📊 预期效果: 成功率从 20% → 90%+
-```
-
----
-
-### 示例 2: Skill 推荐
-
-**失败案例**:
-```
-用户: 帮我分析 600519 茅台的股价
-Bot: 我没有实时股票数据查询能力
-```
-
-**智能诊断**:
-```
-🔍 根因: 缺少 Skill (置信度 95%)
-
-💡 改进建议:
-建议安装 Skill: stock-monitor-pro
-
-功能:
-- 实时股价查询 (A股/港股/美股)
-- K线图生成
-- 技术指标分析
-
-安装方法:
-openclaw skill install stock-monitor-pro
-
-📊 预期效果: 此类任务成功率从 0% → 100%
-```
-
----
-
-### 示例 3: 模型推荐
-
-**失败案例**:
-```
-用户: 帮我做复杂的逻辑推理题
-Bot: [回答错误]
-```
-
-**智能诊断**:
-```
-🔍 根因: 模型能力不足 (置信度 70%)
-
-💡 改进建议:
-当前模型: ark-code-latest (此场景成功率 40%)
-推荐模型: claude-sonnet-4-5 (此场景成功率 95%+)
-
-切换方法:
-/model claude-k4-sonnet/claude-sonnet-4-5
-
-📊 预期效果: 成功率提升 55%
-```
-
----
-
-## 🔧 高级配置
-
-### 自定义推送时间
-
-编辑配置文件:
-
-```bash
-~/.openclaw/workspace/skills/bot-quality-monitor/config.json
-```
-
-修改 `reportTime`:
+编辑配置文件 `~/.openclaw/workspace/skills/bot-quality-monitor/config.json`：
 
 ```json
 {
-  "reportTime": "22:00",  // 修改为您期望的时间 (24小时制)
+  "bitableAppToken": "你的多维表格AppToken",
+  "tables": {
+    "L1": "L1表的TableID",
+    "L2": "L2表的TableID",
+    "L3_daily": "L3每日指标的TableID",
+    "L3_signals": "L3信号的TableID",
+    "L3_roi": "L3 ROI的TableID",
+    "L3_run": "L3 Skill Run的TableID"
+  },
+  "reportTime": "22:00",
   "timezone": "GMT+8"
 }
 ```
 
+### Step 3: 配置定时任务
+
+```bash
+# 编辑 crontab
+crontab -e
+
+# 添加以下定时任务
+# 每日 21:00 生成信号和 ROI
+0 21 * * * python3 ~/.openclaw/workspace/skills/bot-daily-report/scripts/generate-signal-alerts.py
+0 21 * * * python3 ~/.openclaw/workspace/skills/bot-platform-insights/scripts/calculate-skill-roi.py
+
+# 每日 22:00 生成日报和 Dashboard
+0 22 * * * python3 ~/.openclaw/workspace/skills/bot-daily-report/scripts/generate-html-dashboard.py
+```
+
 ---
+
+## ✅ 验证安装
+
+### 检查 Skill 是否安装成功
+
+```bash
+openclaw skill list | grep bot
+```
+
+应该看到：
+```
+bot-quality-monitor      v3.0.0  智能 Bot 健康监控系统
+bot-analytics-collector  v3.0.0  Bot 对话数据采集器
+bot-daily-report         v3.0.0  Bot 健康度日报生成器
+bot-platform-insights    v3.0.0  Bot 平台级洞察引擎
+```
+
+### 测试数据采集
+
+与你的 Bot 进行一次对话，然后检查多维表格的 L1 表是否有新数据。
+
+### 手动触发日报
+
+```bash
+python3 ~/.openclaw/workspace/skills/bot-daily-report/scripts/generate-signal-alerts.py
+```
+
+---
+
+## 📊 日常使用
+
+### 查看日报
+
+每天 22:00 会自动收到飞书私信推送的日报，包含：
+- 📊 综合健康度评分
+- 📈 7 天趋势图
+- 🔔 三类智能信号
+- 💡 改进建议
+
+### 查看 Dashboard
+
+HTML Dashboard 保存在：
+```
+~/.openclaw/workspace/reports/bot-daily-{日期}.html
+```
+
+用浏览器打开即可查看交互式图表。
+
+### 常用命令
+
+| 命令 | 说明 |
+|------|------|
+| `/health` | 查看当前健康度 |
+| `/dashboard` | 获取 Dashboard 链接 |
+| `/diagnose 文档处理` | 诊断特定场景问题 |
+
+---
+
+## 🔧 进阶配置
 
 ### 自定义健康度权重
 
-如果您更关注某个维度，可以调整权重:
+编辑 `config.json`：
 
 ```json
 {
   "healthWeights": {
-    "quality": 0.40,    // 质量维度 (纠错率、首解率)
-    "efficiency": 0.30, // 效率维度 (完成率、响应速度)
-    "resource": 0.30    // 资源维度 (API成功率、Token消耗)
+    "quality": 0.40,
+    "efficiency": 0.30,
+    "resource": 0.30
+  }
+}
+```
+
+### 自定义信号阈值
+
+```json
+{
+  "signalThresholds": {
+    "highScoreLowUse": {
+      "minHealthScore": 85,
+      "maxWeeklyCount": 5
+    },
+    "lowScoreHighRisk": {
+      "minCorrectionRate": 0.10,
+      "minFailureCount": 5
+    }
+  }
+}
+```
+
+### 自定义业务价值权重
+
+```json
+{
+  "businessValue": {
+    "数据分析": 10,
+    "文档处理": 8,
+    "健康诊断": 5,
+    "闲聊": 1
   }
 }
 ```
@@ -223,48 +205,39 @@ Bot: [回答错误]
 
 ## ❓ 常见问题
 
-### Q1: 安装后多久能看到数据？
+### Q: 数据没有自动采集？
 
-**A**: 安装后立即开始采集，第二天 22:00 您会收到第一份日报。
+A: 检查以下几点：
+1. Bot 是否正常运行
+2. 多维表格权限是否正确配置
+3. 查看日志：`~/.openclaw/logs/`
 
----
+### Q: 日报没有推送？
 
-### Q2: 数据存储在哪里？
+A: 检查以下几点：
+1. crontab 是否配置正确
+2. 飞书消息权限是否正常
+3. 手动执行脚本看是否有报错
 
-**A**: 数据存储在飞书多维表格中，完全归您所有。您可以随时导出或删除。
+### Q: 如何删除所有数据？
 
----
-
-### Q3: 我能看到其他用户的数据吗？
-
-**A**: 不能。数据完全隔离，每个用户只能看到自己的 Bot 数据。
-
----
-
-### Q4: 如何卸载？
-
-**A**: 执行以下命令:
-
-```bash
-openclaw skill uninstall bot-quality-monitor
-```
-
-卸载后，数据不会自动删除。如需删除数据，请手动删除多维表格。
+A: 直接删除飞书多维表格中的数据表即可，Skill 不会存储任何本地数据。
 
 ---
 
-### Q5: 诊断建议准确吗？
+## 📞 获取帮助
 
-**A**: 诊断基于规则引擎 + LLM 辅助分析，准确率约 85%。系统会持续学习优化，准确率会越来越高。
-
----
-
-## 📞 支持与反馈
-
-- **文档**: [https://github.com/Chenlei105/bot-quality-monitor](https://github.com/Chenlei105/bot-quality-monitor)
-- **问题反馈**: 在 GitHub 提 Issue
-- **功能建议**: 在 Discussions 讨论
+- **GitHub Issues**: https://github.com/Chenlei105/bot-quality-monitor/issues
+- **文档**: https://github.com/Chenlei105/bot-quality-monitor
 
 ---
 
-**安装完成后，尽情享受智能化的 Bot 健康管理吧！** 🎉
+## 📜 版本信息
+
+- **当前版本**: v3.0.0
+- **发布日期**: 2026-03-24
+- **作者**: 陈磊 / 小炸弹 💣
+
+---
+
+**让你的 Bot 更智能、更健康！** 🚀
