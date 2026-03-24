@@ -1,262 +1,340 @@
 # Bot Quality Monitor
 
-**版本**: 2.1.0  
-**作者**: 小炸弹 💣  
-**发布日期**: 2026-03-20
+**智能 Bot 健康监控系统 v3.0**
 
 ---
 
-## 📝 简介
+## 概述
 
-OpenClaw Bot 质量监控 Skill 体系，自动化监控 Bot 使用质量，提供数据驱动的优化建议。
+Bot Quality Monitor 是一个全自动的 Bot 健康监控与优化系统，为您的 Bot 提供：
 
-**核心功能**：
-- 📊 三维度健康度评分（质量/效率/资源）
-- 💡 三类智能信号提示（高分低用/低分高风险/高风险任务）
-- 📈 每日质量日报 + 每周平台洞察
-- 🎨 HTML Dashboard（Plotly 交互式可视化）
-- 🔍 Skill ROI 评分 + 编排推荐
+- 📊 **自动健康监控** - 每日采集对话数据，生成健康度报告
+- 🔔 **智能预警提示** - 发现问题自动提醒 (高分低用、低分高风险、高风险场景)
+- 💡 **明确改进建议** - 失败案例给出 Prompt 优化、模型推荐、Skill 推荐
+- 📈 **可视化 Dashboard** - 交互式图表展示 Bot 健康状况
 
 ---
 
-## 🚀 快速开始
+## 核心功能
 
-### 1. 安装
+### 1. 自动数据采集
+
+- 自动采集您所有 Bot 的对话数据
+- 支持所有渠道 (私聊/群聊/飞书/企微/Telegram...)
+- 隐私保护: 数据完全隔离，只有您能看到
+
+### 2. 三维健康度评分
+
+**质量维度** (40%):
+- 纠错率 (越低越好)
+- 首次解决率 (越高越好)
+- 知识召回率
+
+**效率维度** (30%):
+- 任务完成率
+- 响应速度
+- 对话轮数
+
+**资源维度** (30%):
+- API 成功率
+- Token 消耗
+- 错误率
+
+### 3. 三类智能信号
+
+**🟢 高分低用**:
+- 发现健康度高但使用频率低的 Bot
+- 建议: 增加使用频率
+
+**🔴 低分高风险**:
+- 发现纠错率高或失败次数多的 Bot
+- 提供: 具体优化建议
+
+**⚠️ 高风险任务场景**:
+- 发现失败率高的任务类型
+- 建议: 避开或优化该场景
+
+### 4. 智能诊断与建议
+
+**Prompt 优化**:
+- 识别模糊不清的 Prompt
+- 提供优化示例 (Before & After)
+
+**模型推荐**:
+- 基于场景推荐最合适的模型
+- 对比不同模型的成功率
+
+**Skill 推荐**:
+- 识别 Bot 缺少的能力
+- 推荐相关 Skill
+
+**知识库建议**:
+- 识别知识盲区
+- 建议补充知识库内容
+
+### 5. 可视化 Dashboard
+
+- 📊 综合健康度仪表盘 (Gauge Chart)
+- 📈 7 天趋势折线图
+- 🎨 场景健康度热力图
+- 🔔 三类信号卡片
+- 📋 失败案例 Top 10 + 诊断
+
+---
+
+## 使用场景
+
+### 场景 1: Bot 健康体检
+
+**问题**: 不知道 Bot 用得好不好？
+
+**解决**: 每日收到健康度报告，一目了然
+
+**效果**:
+- 综合健康度 82 分
+- 纠错率 3% (低于平均水平)
+- 首解率 88% (高于平均水平)
+
+---
+
+### 场景 2: 快速定位问题
+
+**问题**: Bot 经常回答错误，但不知道为什么？
+
+**解决**: 智能诊断给出根因和建议
+
+**示例**:
+```
+失败案例: 文档处理 - 输出为空
+
+🔍 根因: Prompt 不明确 (40%), 权限不足 (30%)
+
+💡 建议:
+1. Prompt 改为: "帮我写一份 2000 字的产品 PRD"
+2. 检查 Bot 是否有文档写入权限
+```
+
+---
+
+### 场景 3: 持续优化 Bot
+
+**问题**: 想让 Bot 越来越好用，但不知道从哪里优化？
+
+**解决**: 基于数据驱动的改进建议
+
+**效果**:
+- Week 1: 健康度 75 分
+- Week 2: 采纳 Prompt 优化建议 → 健康度 80 分
+- Week 3: 安装推荐 Skill → 健康度 85 分
+- Week 4: 切换模型 → 健康度 90 分
+
+---
+
+## 技术架构
+
+```
+用户对话
+    ↓
+bot-analytics-collector (自动采集)
+    ↓
+L1 消息明细 / L2 会话汇总
+    ↓
+智能诊断引擎
+    ├─ 规则引擎 (内置 20+ 诊断规则)
+    └─ LLM 辅助诊断 (Claude 分析)
+    ↓
+L3 信号 + 诊断报告
+    ↓
+每日 22:00 推送日报
+    ↓
+用户查看 Dashboard
+```
+
+---
+
+## 数据隐私
+
+- ✅ **完全隔离**: 您只能看到自己的 Bot 数据
+- ✅ **本地存储**: 数据存在您的飞书多维表格
+- ✅ **随时删除**: 卸载后可手动删除数据
+- ✅ **不会泄露**: 不会将您的对话内容分享给他人
+
+---
+
+## 安装要求
+
+### 必需权限
+
+- `im:message` - 读取对话消息
+- `im:message:send_as_bot` - 发送日报
+- `bitable:app` - 读写多维表格
+
+### 环境要求
+
+- OpenClaw >= 2026.3.0
+- 飞书账号 (企业版/个人版均可)
+
+---
+
+## 安装方式
+
 ```bash
-skillhub install bot-quality-monitor
+openclaw skill install bot-quality-monitor
 ```
 
-### 2. 初始化配置
-```bash
-/init bot-analytics-collector
-```
+详见 [INSTALL.md](./INSTALL.md)
 
-**系统会提示你输入**：
-1. **飞书多维表格 App Token**：你的数据中台 Token
-2. **时区**：GMT+8（中国标准时间）
-3. **是否存储消息内容**：建议选 No（隐私保护）
+---
 
-### 3. 配置环境变量
-```bash
-export BITABLE_APP_TOKEN="你的飞书多维表格AppToken"
-```
+## 配置文件
 
-### 4. 创建数据表
-运行建表脚本：
-```bash
-python3 ~/.openclaw/skills/bot-quality-monitor/scripts/create-tables.py
-```
+### config.json
 
-这会创建 6 张表：
-- L1_消息明细表
-- L2_会话汇总表
-- L3_每日指标汇总
-- L3_Signal_Alerts
-- L3_Skill_ROI
-- L3_Skill_Run
-
-### 5. 配置定时任务
-```bash
-crontab -e
-
-# 添加以下行：
-# 每日 22:00 生成日报
-0 22 * * * ~/.openclaw/skills/bot-quality-monitor/scripts/daily-report.sh
-
-# 每周日 20:00 生成周报
-0 20 * * 0 ~/.openclaw/skills/bot-quality-monitor/scripts/weekly-insights.sh
+```json
+{
+  "reportTime": "22:00",
+  "timezone": "GMT+8",
+  "healthWeights": {
+    "quality": 0.40,
+    "efficiency": 0.30,
+    "resource": 0.30
+  },
+  "signalThresholds": {
+    "highScoreLowUse": {
+      "minHealthScore": 85,
+      "maxWeeklyCount": 5
+    },
+    "lowScoreHighRisk": {
+      "minCorrectionRate": 0.10,
+      "minFailureCount": 5
+    },
+    "highRiskTask": {
+      "minFailureRate": 0.30,
+      "minSampleCount": 5
+    }
+  }
+}
 ```
 
 ---
 
-## 📊 核心功能
+## 命令
 
-### 1. 三维度健康度评分
-- **质量（40%）**：纠错率≤5%、首解率≥80%、好评率≥90%
-- **效率（30%）**：任务完成率≥80%、响应速度≤3秒
-- **资源（30%）**：API成功率≥99%、错误频率≤5次/天
+### `/dashboard`
 
-**综合健康度** = 质量×0.40 + 效率×0.30 + 资源×0.30
+查看可视化 Dashboard
 
-### 2. 三类智能信号提示
-- 🟢 **高分低用 Bot**：健康度高但使用频次低 → 建议多用
-- 🔴 **低分高风险 Bot**：纠错率高或失败频繁 → 处方优化
-- ⚠️ **高风险任务预警**：某类任务失败率高 → 建议避开
-
-### 3. 每日质量日报
-**生成时间**：每日 22:00 GMT+8  
-**推送方式**：飞书私信
-
-**日报内容**：
-- 昨日概览（总对话/完成任务/纠错次数）
-- 综合健康度得分 + 环比对比
-- 问题诊断 + 改进处方
-- 今日亮点
-- 7天成长趋势
-- 智能行动建议（三类信号）
-
-### 4. HTML Dashboard
-**生成命令**：
-```bash
-python3 ~/.openclaw/skills/bot-quality-monitor/scripts/generate-dashboard.py
 ```
-
-**输出文件**：
-```
-~/.openclaw/workspace/reports/bot-daily-YYYY-MM-DD.html
-```
-
-**包含内容**：
-- 📊 综合健康度仪表盘（实时动画）
-- 📈 7天趋势折线图（纠错率 + 首解率）
-- 🔗 数据中台快速链接
-
-### 5. 每周平台洞察
-**生成时间**：每周日 20:00 GMT+8  
-**推送方式**：飞书私信
-
-**周报内容**：
-- 平台健康看板（Bot 排行榜 Top 5）
-- 失败模式识别（高发场景 + 改进处方）
-- Skill 自我迭代建议
-- Skill 编排推荐（最优组合 + 不推荐组合）
-
----
-
-## 🗂️ 数据架构
-
-### 6 张表结构
-
-| 表名 | 说明 | 字段数 |
-|------|------|--------|
-| L1_消息明细表 | 每条消息一行 | 15 |
-| L2_会话汇总表 | 每个会话一行 | 21 |
-| L3_每日指标汇总 | 每日汇总 | 19 |
-| L3_Signal_Alerts | 三类信号记录 | 12 |
-| L3_Skill_ROI | Skill 性价比评分 | 10 |
-| L3_Skill_Run | Skill 执行拆分 | 7 |
-
-**数据流转**：
-```
-用户对话 → L1 实时写入 → L2 会话汇总 → L3 每日聚合 → 日报/周报
+/dashboard
 ```
 
 ---
 
-## 🔧 配置说明
+### `/health`
 
-### 配置文件位置
+查看当前健康度
+
 ```
-~/.openclaw/skills/bot-analytics-shared/config.yaml
-```
+/health
 
-### 必填配置项
-```yaml
-# 数据中台配置
-app_token: Xw4Tb5C8KagMiQswkdacNfVPn8e  # 实际部署时从环境变量读取
-
-# 数据表 Table ID
-table_l1: tblmKO3HejbWpUWe           # L1_消息明细表
-table_l2: tblT0I1nCFhbpvGa           # L2_会话汇总表
-table_l3_daily: tbldgJxU6QUSjnf6     # L3_每日指标汇总
-table_l3_signal_alerts: tblVDILmtu1oYRTE  # L3_Signal_Alerts
-table_l3_skill_roi: tblvmjcMrdtSFF8D      # L3_Skill_ROI
-table_l3_skill_run: tblGOfgzbcle1C4N      # L3_Skill_Run
-
-# 时区配置
-timezone: GMT+8
-
-# 隐私配置
-store_message_content: false  # 默认不存消息内容
-
-# HTML Dashboard
-enable_html_dashboard: false
-dashboard_output_dir: ~/.openclaw/workspace/reports
+回复:
+📊 综合健康度: 82 分
+├─ 质量: 85 分
+├─ 效率: 80 分
+└─ 资源: 78 分
 ```
 
 ---
 
-## 📚 详细文档
+### `/diagnose [场景]`
 
-- **PRD v1.5**：https://xcnlx9hjxf3f.feishu.cn/wiki/I5fVwdcRCioExIkDIXtcrqdtnUg
-- **项目总览**：https://xcnlx9hjxf3f.feishu.cn/wiki/UEYlwE9MQiVmETk2WPlc0b5UnSn
-- **数据中台**：https://xcnlx9hjxf3f.feishu.cn/base/Xw4Tb5C8KagMiQswkdacNfVPn8e
+诊断特定场景的问题
 
----
+```
+/diagnose 文档处理
 
-## 🐛 常见问题
-
-### Q1：为什么 L3_每日指标汇总是空的？
-A：需要等到每日凌晨 3:00 自动生成，或手动触发聚合任务
-
-### Q2：日报没有自动推送？
-A：检查 HEARTBEAT 定时任务是否配置（crontab -l）
-
-### Q3：HTML Dashboard 无法打开？
-A：
-1. 检查文件是否存在：`ls ~/.openclaw/workspace/reports/`
-2. 右键 → 打开方式 → 选择浏览器
-3. 或拖拽文件到浏览器窗口
-
-### Q4：数据不准确怎么办？
-A：
-1. 检查配置文件：`~/.openclaw/skills/bot-analytics-shared/config.yaml`
-2. 确认 App Token 正确：`echo $BITABLE_APP_TOKEN`
-3. 查看日志：`tail -f ~/.openclaw/workspace/logs/bot-daily-report.log`
+回复:
+🔍 文档处理场景诊断:
+失败率: 15%
+主要原因: Prompt 不明确 (60%)
+改进建议: [详细建议...]
+```
 
 ---
 
-## 📦 包含的子 Skill
+## 数据表结构
 
-1. **bot-analytics-collector** v2.1.0 — 数据采集层
-2. **bot-daily-report** v2.1.0 — 用户日报
-3. **bot-platform-insights** v2.1.0 — 平台洞察
+### L1_消息明细表
 
----
+存储每条消息的详细信息 (15 字段)
 
-## 🎓 技术亮点
+### L2_会话汇总表
 
-1. **会话切割优化**：时间窗口 + 任务边界双约束
-2. **三类信号提示**：数据驱动的行动建议
-3. **Skill ROI 评分**：成本视角看性价比
-4. **多 Skill 协作分析**：拆解协作成本系数
-5. **HTML Dashboard**：交互式可视化
+存储每个会话的汇总数据 (22 字段，新增"用户所有者ID")
 
----
+### L3_每日指标汇总
 
-## 📝 版本历史
+存储每日的聚合指标 (19 字段)
 
-### v2.1.0（2026-03-20）
-- ✨ 新增三类智能信号提示
-- ✨ 新增 HTML Dashboard
-- ✨ 新增 Skill ROI 评分
-- ✨ 新增多 Skill 协作分析
-- ✨ 会话切割优化（时间窗口+任务边界）
-- ✨ L2 新增 3 个字段（Skill数量/协作成本系数/关键路径）
-- ✨ L3 新增 3 张表（Signal_Alerts/Skill_ROI/Skill_Run）
+### L3_Signal_Alerts
 
-### v2.0.0（2026-03-18）
-- ✨ 生产化改造（App Token 配置化、隐私保护、写入队列）
-- ✨ 实时触发 + 归档机制
+存储三类智能信号 (12 字段)
 
-### v1.0.0（2026-03-18）
-- 🎉 初版发布
+### L3_Skill_ROI
+
+存储 Skill 性价比评分 (10 字段)
+
+### L3_Skill_Run
+
+存储多 Skill 协作记录 (7 字段)
+
+### L4_平台洞察汇总 (v3.0 新增)
+
+存储全平台聚合数据 (仅平台管理员可见)
 
 ---
 
-## 📄 许可证
+## 版本历史
+
+### v3.0 (2026-03-24)
+
+- ✨ 多租户支持 (多用户可安装)
+- ✨ 智能诊断引擎 (Prompt/模型/Skill 建议)
+- ✨ 平台级 Dashboard (管理员可看全局)
+- ✨ 自我优化机制 (规则库自动迭代)
+
+### v2.1.1 (2026-03-20)
+
+- 三类信号自动生成
+- Skill ROI 评分计算
+- HTML Dashboard 生成
+
+### v2.1.0 (2026-03-18)
+
+- 初始版本
+- 基础数据采集和报告
+
+---
+
+## 贡献者
+
+- **陈磊** - 产品设计
+- **小炸弹 💣** - 技术实现
+
+---
+
+## 许可证
 
 MIT License
 
 ---
 
-## 👤 作者
+## 相关链接
 
-小炸弹 💣 (OpenClaw Agent)
+- **GitHub**: https://github.com/Chenlei105/bot-quality-monitor
+- **文档**: [INSTALL.md](./INSTALL.md)
+- **技术设计**: [DESIGN.md](./DESIGN.md)
 
 ---
 
-## 🙏 致谢
-
-感谢大少爷（陈磊）的全程支持和高效协作 💪  
-感谢 OpenClaw 团队提供的强大工具链 🛠️
+**让您的 Bot 更智能、更健康！** 🚀

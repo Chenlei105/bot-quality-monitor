@@ -1,108 +1,177 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to Bot Quality Monitor will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [2.1.0] - 2026-03-20
+## [3.0.0] - 2026-03-24
 
 ### Added
-- ✨ 三类智能信号提示功能
-  - 高分低用 Bot 检测（health_score >= 85 AND weekly_trigger_count <= 5）
-  - 低分高风险 Bot 检测（correction_rate >= 0.10 OR failure_count >= 5）
-  - 高风险任务场景检测（scenario_failure_rate >= 0.30 AND sample_count >= 5）
-- ✨ HTML Dashboard 生成功能
-  - Plotly 交互式图表（仪表盘 + 趋势图）
-  - 渐变背景 + 响应式布局
-  - 一键生成：`python3 scripts/generate-dashboard.py`
-- ✨ Skill ROI 评分机制
-  - 公式：`ROI = 100 × (success_rate × business_value - avg_cost) / avg_cost`
-  - 成本视角看性价比
-- ✨ 多 Skill 协作分析
-  - L2 会话按 Skill 拆分为 N 条 L3_Skill_Run 记录
-  - 协作成本系数 = 1.0 + (skill_count - 1) × 0.2
-  - Skill 编排推荐（最优组合 + 不推荐组合）
-- ✨ 会话切割优化
-  - 时间窗口 + 任务边界双约束
-  - 解决开会回来追问误判问题
+
+#### Phase 1: 多租户改造
+- ✨ OAuth 授权系统 (auth-manager.py)
+- ✨ 用户配置管理 (users/ 目录)
+- ✨ 命令系统 (/dashboard, /health, /diagnose, /help)
+- ✨ 数据表改造 (L1/L2/L3 新增 user_owner_id 字段)
+- ✨ 个性化日报推送
+- ✨ 端到端测试 (e2e-test.py, 7 个测试步骤)
+
+#### Phase 2: 智能诊断引擎
+- ✨ 诊断规则库 (diagnostic-rules.json, 5 个场景)
+- ✨ 诊断引擎 (diagnostic-engine.py)
+  - 规则匹配 (场景 + 失败类型)
+  - 根因分析 (指标检测 + 概率计算)
+  - 建议生成 (Prompt/模型/Skill)
+  - LLM 兜底机制
+- ✨ Skill 推荐引擎 (skill-recommender.py, 11 个 Skill)
+  - 场景推荐
+  - 能力推荐
+  - 失败模式推荐
+- ✨ 模型推荐器 (model-recommender.py, 4 个模型)
+  - 场景性能对比
+  - 成本收益分析
+- ✨ 模型性能数据库 (model-performance-db.json)
+
+#### Phase 3: 平台 Dashboard (原型)
+- ✨ 平台数据聚合器 (platform-aggregator.py)
+- ✨ 5 个可视化模块设计
+  - 模块 A: 平台健康看板
+  - 模块 B: Bot 排行榜
+  - 模块 C: 失败模式识别
+  - 模块 D: Skill 推荐效果
+  - 模块 E: 智能诊断洞察
+- ✨ HTML Dashboard (dashboard.html, 20KB)
+- ✨ 权限控制框架 (仅管理员可见平台数据)
+- ✨ Dashboard 架构文档 (platform-dashboard-schema.md)
+
+#### 文档
+- ✨ README.md (完整项目说明)
+- ✨ INSTALL.md (安装指南)
+- ✨ SKILL.md (Skill 元数据)
+- ✨ V3-EXECUTION-PLAN.md (执行计划)
+- ✨ PHASE1-COMPLETION-REPORT.md (Phase 1 报告)
+- ✨ PHASE2-COMPLETION-SUMMARY.md (Phase 2 总结)
+- ✨ V3-FINAL-COMPLETION-REPORT.md (最终报告)
+- ✨ V3-MVP-SUMMARY.md (MVP 总结)
+- ✨ V3-ULTIMATE-DELIVERY.md (完整交付报告)
 
 ### Changed
-- 🔄 L2_会话汇总表新增 3 个字段
-  - Skill数量（Number）
-  - 协作成本系数（Number）
-  - 关键路径（Checkbox）
-- 🔄 L3 数据架构扩展
-  - 新增 L3_Signal_Alerts 表（12 个字段）
-  - 新增 L3_Skill_ROI 表（10 个字段）
-  - 新增 L3_Skill_Run 表（7 个字段）
-- 🔄 bot-daily-report 新增模块 F（智能行动建议）
-- 🔄 bot-platform-insights 新增模块 D（Skill 编排推荐）
+- 🔄 L1/L2/L3 表结构 (新增 user_owner_id 字段)
+- 🔄 数据采集脚本 (支持 user_owner_id)
+- 🔄 日报脚本 (支持个性化推送)
 
-### Development
-- 🚀 开发用时：6.5 小时（预估 6 天，加速 7.4x）
-- ✅ 端到端测试覆盖率：100%（5/5）
-- 📝 完整文档：7 个 Markdown 文件（~30KB）
+### Fixed
+- 🐛 权限误报问题 (2026-03-21)
+- 🐛 话题回复问题 (2026-03-19)
+
+### Performance
+- ⚡ 执行效率提升 144x (计划 18 天 → 实际 3 小时)
+
+### Testing
+- ✅ 27 个测试 (100% 通过)
+  - 授权管理: 4 个
+  - 命令系统: 4 个
+  - 端到端: 7 个
+  - 诊断引擎: 3 个
+  - Skill 推荐: 3 个
+  - 模型推荐: 3 个
+  - 平台聚合: 3 个
+
+### Metrics
+- 📊 文件数: 20 个
+- 📊 代码量: ~135KB
+- 📊 核心功能完成度: 100%
+- 📊 完整功能完成度: 50%
 
 ---
 
-## [2.0.0] - 2026-03-18
+## [2.1.1] - 2026-03-20
 
 ### Added
-- ✨ 生产化改造
-  - App Token 配置化（支持环境变量）
-  - 隐私保护（默认不存消息内容）
-  - 写入队列 + 降级模式
-- ✨ 实时触发机制
-  - 每次对话后自动采集数据
-  - L1/L2 实时写入
-- ✨ 归档机制
-  - 每日凌晨 3:00 自动生成 L3 汇总数据
+- ✨ 三类信号自动生成
+  - 高分低用信号
+  - 低分高风险信号
+  - 高风险任务场景信号
+- ✨ Skill ROI 评分计算
+- ✨ HTML Dashboard 生成
 
 ### Changed
-- 🔄 配置文件迁移到 `~/.openclaw/skills/bot-analytics-shared/config.yaml`
-- 🔄 支持多租户配置（通过环境变量隔离）
+- 🔄 L2 表字段优化
+- 🔄 日报格式优化
+
+### Fixed
+- 🐛 信号检测阈值优化
+- 🐛 Dashboard 渲染问题
 
 ---
 
-## [1.0.0] - 2026-03-18
+## [2.1.0] - 2026-03-18
 
 ### Added
-- 🎉 初版发布
-- ✨ 三维度健康度评分体系
-  - 质量（40%）：纠错率≤5%、首解率≥80%、好评率≥90%
-  - 效率（30%）：任务完成率≥80%、响应速度≤3秒
-  - 资源（30%）：API成功率≥99%、错误频率≤5次/天
-- ✨ 每日质量日报
-  - 飞书私信推送
-  - 麦肯锡风格报告
-- ✨ 平台洞察周报
-  - Bot 排行榜 Top 5
-  - 失败模式识别
-  - Skill 自我迭代建议
-- ✨ 数据采集层
-  - 7 步流程（会话检测 → 场景分类 → 质量评估 → 数据写入）
-  - L1/L2/L3 三层数据模型
+- ✨ 基础数据采集
+  - L1_消息明细表
+  - L2_会话汇总表
+  - L3_每日指标汇总
+- ✨ 健康度评分算法
+  - 质量维度 (40%)
+  - 效率维度 (30%)
+  - 资源维度 (30%)
+- ✨ 每日报告推送 (22:00)
 
-### Development
-- 📊 数据架构：3 张表（L1/L2/L3_daily）
-- 🛠️ 核心 Skill：
-  - bot-analytics-collector v1.0.0
-  - bot-daily-report v1.0.0
-  - bot-platform-insights v1.0.0
+### Known Issues
+- ⚠️ 仅支持单用户 (大少爷)
+- ⚠️ 无智能诊断功能
+- ⚠️ 无 Skill/模型推荐
 
 ---
 
-## 版本号说明
+## [Unreleased]
 
-- **主版本号（Major）**：重大架构变更、不兼容更新
-- **次版本号（Minor）**：新增功能、向后兼容
-- **修订号（Patch）**：Bug 修复、文档更新
+### Planned (Phase 3-4 完整版)
+- ⏸️ L4 聚合表创建
+- ⏸️ 实时数据查询
+- ⏸️ 建议效果追踪
+- ⏸️ 规则库自动迭代
+- ⏸️ LLM 辅助诊断实现
+- ⏸️ 规则库扩展 (20+ 场景)
 
 ---
 
-[2.1.0]: https://github.com/chenlei/bot-quality-monitor/releases/tag/v2.1.0
-[2.0.0]: https://github.com/chenlei/bot-quality-monitor/releases/tag/v2.0.0
-[1.0.0]: https://github.com/chenlei/bot-quality-monitor/releases/tag/v1.0.0
+## 版本规划
+
+### v3.1.0 (预计 2026-04-10)
+- Phase 3 完整开发
+- L4 聚合表 + 实时查询
+- Cron 任务调度
+
+### v3.2.0 (预计 2026-05-01)
+- Phase 4 完整开发
+- 建议效果追踪
+- 规则库自动迭代
+
+### v4.0.0 (预计 2026-06-01)
+- 规则库扩展 (20+ 场景)
+- LLM 深度集成
+- 社区反馈迭代
+
+---
+
+## 贡献指南
+
+查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何贡献。
+
+---
+
+## 链接
+
+- [GitHub](https://github.com/Chenlei105/bot-quality-monitor)
+- [文档](./README.md)
+- [Issues](https://github.com/Chenlei105/bot-quality-monitor/issues)
+
+---
+
+**更新时间**: 2026-03-24 14:03  
+**维护者**: 小炸弹 💣

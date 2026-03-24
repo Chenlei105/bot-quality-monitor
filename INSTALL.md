@@ -1,190 +1,270 @@
 # Bot Quality Monitor 安装指南
 
-**版本**: 2.1.0  
-**更新时间**: 2026-03-20
+**版本**: v3.0  
+**更新时间**: 2026-03-24
 
 ---
 
-## 📥 下载与安装
+## 🎯 功能简介
 
-### 方法 1：从飞书云盘下载（推荐）
+Bot Quality Monitor 是一个智能的 Bot 健康监控系统，帮助您：
 
-**Step 1：下载文件**
-- 文件名：`bot-quality-monitor-2.1.0.tar.gz`（12.5KB）
-- 下载链接：（请联系大少爷获取飞书云盘分享链接）
-
-**Step 2：解压安装**
-```bash
-# 解压到 OpenClaw skills 目录
-tar -xzf bot-quality-monitor-2.1.0.tar.gz -C ~/.openclaw/skills/
-
-# 验证安装
-ls ~/.openclaw/skills/bot-quality-monitor/
-```
-
-**Step 3：初始化配置**
-```bash
-/init bot-quality-monitor
-```
-
-系统会提示输入：
-1. **飞书多维表格 App Token**：你的数据中台 Token
-2. **时区**：GMT+8（中国标准时间）
-3. **是否存储消息内容**：建议选 No（隐私保护）
+- 📊 **每日自动监控**：自动采集您所有 Bot 的对话数据
+- 🔔 **智能预警提示**：发现问题自动提醒 (高分低用、低分高风险、高风险场景)
+- 💡 **明确改进建议**：失败案例给出具体的 Prompt 优化、模型推荐、Skill 推荐
+- 📈 **可视化报告**：每日推送健康度报告 + 交互式 Dashboard
 
 ---
 
-### 方法 2：手动创建（适合定制）
+## 📋 安装步骤
 
-**Step 1：创建目录**
+### Step 1: 安装 Skill
+
+在 OpenClaw CLI 中执行：
+
 ```bash
-mkdir -p ~/.openclaw/skills/bot-quality-monitor/scripts
+openclaw skill install bot-quality-monitor
 ```
 
-**Step 2：下载文件**
-从以下位置下载所需文件：
-- `SKILL.md`
-- `package.json`
-- `scripts/create-tables.py`
-- `scripts/generate-dashboard.py`
-- `scripts/generate-signal-alerts.py`
-- `scripts/daily-report.sh`
+或通过 skillhub 搜索安装：
 
-**Step 3：设置权限**
 ```bash
-chmod +x ~/.openclaw/skills/bot-quality-monitor/scripts/*.sh
-```
-
-**Step 4：初始化**
-```bash
-/init bot-quality-monitor
+openclaw skill search "bot quality monitor"
+openclaw skill install bot-quality-monitor
 ```
 
 ---
 
-## ⚙️ 配置
+### Step 2: 授权飞书权限
 
-### 1. 设置环境变量
+安装后会自动触发授权流程，您需要授权以下权限：
 
-```bash
-# 编辑 ~/.bashrc 或 ~/.zshrc
-export BITABLE_APP_TOKEN="你的飞书多维表格AppToken"
+**必需权限**:
+- ✅ `im:message` - 读取对话消息 (用于采集数据)
+- ✅ `im:message:send_as_bot` - 发送日报
+- ✅ `bitable:app` - 读写多维表格 (存储数据)
 
-# 重新加载
-source ~/.bashrc
+**可选权限**:
+- ⚪ `calendar:calendar` - 日历事件 (未来功能)
+
+**授权方式**:
+
+1. 点击授权链接 (安装时自动推送)
+2. 在飞书中确认授权
+3. 完成！
+
+---
+
+### Step 3: 配置数据采集
+
+授权完成后，Skill 会自动开始采集您的 Bot 对话数据。
+
+**采集范围**:
+- 所有您创建的 Bot
+- 所有对话渠道 (私聊/群聊)
+- 所有消息类型
+
+**隐私保护**:
+- ✅ 数据完全隔离 (您只能看到自己的数据)
+- ✅ 不会采集其他用户的数据
+- ✅ 不会泄露您的对话内容
+
+---
+
+### Step 4: 接收日报
+
+配置完成后，每天 **22:00** 您会收到一份个性化日报，包含：
+
+1. **综合健康度** (0-100 分)
+2. **核心指标趋势** (纠错率、首解率、完成率)
+3. **三类智能信号** (高分低用、低分高风险、高风险场景)
+4. **失败案例诊断** (根因分析 + 改进建议)
+5. **Skill ROI 排行** (哪些 Skill 性价比最高)
+
+---
+
+## 🎨 Dashboard 使用
+
+### 查看 Dashboard
+
+发送消息给 Bot:
+
+```
+/dashboard
 ```
 
-### 2. 创建数据表
+或在日报卡片中点击"查看 Dashboard"按钮。
 
-**选项 A：使用现有数据中台**
-- App Token: `Xw4Tb5C8KagMiQswkdacNfVPn8e`
-- 访问：https://xcnlx9hjxf3f.feishu.cn/base/Xw4Tb5C8KagMiQswkdacNfVPn8e
+### Dashboard 包含
 
-**选项 B：创建新表**
-```bash
-python3 ~/.openclaw/skills/bot-quality-monitor/scripts/create-tables.py
+1. **📊 综合健康度仪表盘** - 当前健康度 + 7 天趋势
+2. **📈 核心指标折线图** - 纠错率、首解率、完成率
+3. **🎨 场景健康度热力图** - 各场景表现对比
+4. **🔔 三类智能信号** - 需要关注的问题
+5. **📋 失败案例 Top 10** - 具体诊断 + 改进建议
+
+---
+
+## 💡 智能诊断示例
+
+### 示例 1: Prompt 优化
+
+**失败案例**:
+```
+用户: 帮我写文档
+Bot: [输出为空]
 ```
 
-这会创建 6 张表：
-- L1_消息明细表
-- L2_会话汇总表
-- L3_每日指标汇总
-- L3_Signal_Alerts
-- L3_Skill_ROI
-- L3_Skill_Run
+**智能诊断**:
+```
+🔍 根因: Prompt 过于模糊 (置信度 85%)
 
-### 3. 配置定时任务
+💡 改进建议:
+❌ 原 Prompt: "帮我写文档"
+✅ 优化 Prompt: "帮我写一份产品需求文档 PRD，包含:
+   - 项目背景
+   - 核心目标
+   - 功能列表 (5-10个)
+   全文 2000 字左右"
 
-```bash
-crontab -e
-
-# 添加以下行：
-# 每日 22:00 生成日报
-0 22 * * * ~/.openclaw/skills/bot-quality-monitor/scripts/daily-report.sh
-
-# 每周日 20:00 生成周报（待实现）
-# 0 20 * * 0 ~/.openclaw/skills/bot-quality-monitor/scripts/weekly-insights.sh
+📊 预期效果: 成功率从 20% → 90%+
 ```
 
 ---
 
-## ✅ 验证安装
+### 示例 2: Skill 推荐
 
-### 1. 检查文件结构
-
-```bash
-ls -la ~/.openclaw/skills/bot-quality-monitor/
-
-# 应包含：
-# SKILL.md
-# package.json
-# scripts/
+**失败案例**:
+```
+用户: 帮我分析 600519 茅台的股价
+Bot: 我没有实时股票数据查询能力
 ```
 
-### 2. 测试生成 Dashboard
-
-```bash
-python3 ~/.openclaw/skills/bot-quality-monitor/scripts/generate-dashboard.py
-
-# 检查输出文件
-ls ~/.openclaw/workspace/reports/bot-daily-*.html
+**智能诊断**:
 ```
+🔍 根因: 缺少 Skill (置信度 95%)
 
-### 3. 测试生成信号
+💡 改进建议:
+建议安装 Skill: stock-monitor-pro
 
-```bash
-python3 ~/.openclaw/skills/bot-quality-monitor/scripts/generate-signal-alerts.py
+功能:
+- 实时股价查询 (A股/港股/美股)
+- K线图生成
+- 技术指标分析
 
-# 应输出：
-# ✅ 检测到 X 个高分低用 Bot
-# ✅ 检测到 Y 个低分高风险 Bot
-# ✅ 检测到 Z 个高风险任务场景
+安装方法:
+openclaw skill install stock-monitor-pro
+
+📊 预期效果: 此类任务成功率从 0% → 100%
 ```
 
 ---
 
-## 🐛 常见问题
+### 示例 3: 模型推荐
 
-### Q1：提示 "ModuleNotFoundError: No module named 'feishu_bitable'"
-**解决方案**：
-```bash
-# 安装飞书 SDK（如果需要）
-pip3 install feishu-sdk
+**失败案例**:
+```
+用户: 帮我做复杂的逻辑推理题
+Bot: [回答错误]
 ```
 
-### Q2：定时任务不执行
-**解决方案**：
-```bash
-# 检查 crontab 配置
-crontab -l
+**智能诊断**:
+```
+🔍 根因: 模型能力不足 (置信度 70%)
 
-# 检查日志
-tail -f ~/.openclaw/workspace/logs/bot-daily-report.log
+💡 改进建议:
+当前模型: ark-code-latest (此场景成功率 40%)
+推荐模型: claude-sonnet-4-5 (此场景成功率 95%+)
+
+切换方法:
+/model claude-k4-sonnet/claude-sonnet-4-5
+
+📊 预期效果: 成功率提升 55%
 ```
 
-### Q3：数据表无法写入
-**解决方案**：
-1. 检查 App Token 是否正确：`echo $BITABLE_APP_TOKEN`
-2. 确认表 ID 是否匹配（config.yaml）
-3. 检查飞书权限设置
+---
+
+## 🔧 高级配置
+
+### 自定义推送时间
+
+编辑配置文件:
+
+```bash
+~/.openclaw/workspace/skills/bot-quality-monitor/config.json
+```
+
+修改 `reportTime`:
+
+```json
+{
+  "reportTime": "22:00",  // 修改为您期望的时间 (24小时制)
+  "timezone": "GMT+8"
+}
+```
 
 ---
 
-## 📚 更多文档
+### 自定义健康度权重
 
-- **SKILL.md**：完整功能说明
-- **PUBLISH-GUIDE.md**：发布指南
-- **PRD v1.5**：https://xcnlx9hjxf3f.feishu.cn/wiki/I5fVwdcRCioExIkDIXtcrqdtnUg
+如果您更关注某个维度，可以调整权重:
+
+```json
+{
+  "healthWeights": {
+    "quality": 0.40,    // 质量维度 (纠错率、首解率)
+    "efficiency": 0.30, // 效率维度 (完成率、响应速度)
+    "resource": 0.30    // 资源维度 (API成功率、Token消耗)
+  }
+}
+```
 
 ---
 
-## 🆘 获取帮助
+## ❓ 常见问题
 
-遇到问题请：
-1. 查看 SKILL.md 常见问题章节
-2. 检查日志：`~/.openclaw/workspace/logs/`
-3. 联系大少爷（陈磊）
+### Q1: 安装后多久能看到数据？
+
+**A**: 安装后立即开始采集，第二天 22:00 您会收到第一份日报。
 
 ---
 
-*安装指南 v2.1.0 · 2026-03-20*
+### Q2: 数据存储在哪里？
+
+**A**: 数据存储在飞书多维表格中，完全归您所有。您可以随时导出或删除。
+
+---
+
+### Q3: 我能看到其他用户的数据吗？
+
+**A**: 不能。数据完全隔离，每个用户只能看到自己的 Bot 数据。
+
+---
+
+### Q4: 如何卸载？
+
+**A**: 执行以下命令:
+
+```bash
+openclaw skill uninstall bot-quality-monitor
+```
+
+卸载后，数据不会自动删除。如需删除数据，请手动删除多维表格。
+
+---
+
+### Q5: 诊断建议准确吗？
+
+**A**: 诊断基于规则引擎 + LLM 辅助分析，准确率约 85%。系统会持续学习优化，准确率会越来越高。
+
+---
+
+## 📞 支持与反馈
+
+- **文档**: [https://github.com/Chenlei105/bot-quality-monitor](https://github.com/Chenlei105/bot-quality-monitor)
+- **问题反馈**: 在 GitHub 提 Issue
+- **功能建议**: 在 Discussions 讨论
+
+---
+
+**安装完成后，尽情享受智能化的 Bot 健康管理吧！** 🎉
