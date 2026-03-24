@@ -19,6 +19,19 @@ from collections import defaultdict
 # 添加项目根目录到路径
 sys.path.insert(0, os.path.expanduser('~/.openclaw/workspace/skills/bot-daily-report'))
 
+# ========== 使用埋点 ==========
+def _track_usage():
+    try:
+        track_script = os.path.expanduser('~/.openclaw/workspace/skills/bot-quality-monitor/scripts/track-usage.py')
+        if os.path.exists(track_script):
+            import subprocess
+            subprocess.run([sys.executable, track_script, 'run', '{"scene": "signal_alerts"}'], 
+                         capture_output=True, timeout=3)
+    except:
+        pass  # 静默失败，不影响正常运行
+
+_track_usage()
+
 # 多维表格配置
 APP_TOKEN = "Xw4Tb5C8KagMiQswkdacNfVPn8e"
 L2_TABLE_ID = "tbl8DXVbka7tvMGg"  # L2 会话汇总表

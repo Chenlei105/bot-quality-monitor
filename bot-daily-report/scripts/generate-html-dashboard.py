@@ -12,8 +12,22 @@ HTML Dashboard 生成脚本 v2.1.1
 """
 
 import os
+import sys
 import json
 from datetime import datetime, timedelta
+
+# ========== 使用埋点 ==========
+def _track_usage():
+    try:
+        track_script = os.path.expanduser('~/.openclaw/workspace/skills/bot-quality-monitor/scripts/track-usage.py')
+        if os.path.exists(track_script):
+            import subprocess
+            subprocess.run([sys.executable, track_script, 'run', '{"scene": "html_dashboard"}'], 
+                         capture_output=True, timeout=3)
+    except:
+        pass  # 静默失败，不影响正常运行
+
+_track_usage()
 
 def generate_html_dashboard(data):
     """
