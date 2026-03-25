@@ -1,6 +1,6 @@
 # Bot Quality Monitor
 
-**智能 Bot 健康监控系统 v3.0**
+**智能 Bot 健康监控系统 v4.0.0**
 
 ---
 
@@ -181,6 +181,11 @@ L3 信号 + 诊断报告
 ```bash
 openclaw skill install bot-quality-monitor
 ```
+
+安装完成后，**对你的 Bot 说一句话**：
+> 帮我创建 Bot 质量监控数据表
+
+Bot 会全自动完成所有配置，全程 10 秒搞定！
 
 详见 [INSTALL.md](./INSTALL.md)
 
