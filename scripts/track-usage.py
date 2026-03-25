@@ -106,16 +106,41 @@ def track(event_type: str, extra_data: dict = None):
 def sync_to_bitable():
     """
     将本地日志同步到飞书多维表格
-    需要在有飞书鉴权的环境下运行（如 OpenClaw Agent）
+    
+    方案：生成待上报数据文件，由 OpenClaw Agent 自动上报
     """
     log_file = os.path.expanduser("~/.openclaw/workspace/logs/skill-usage.jsonl")
     if not os.path.exists(log_file):
         print("[sync] 无待同步数据")
         return
     
-    print(f"[sync] 准备同步 {log_file} 到多维表格")
+    # 读取本地日志
+    records = []
+    with open(log_file, "r") as f:
+        for line in f:
+            try:
+                records.append(json.loads(line.strip()))
+            except json.JSONDecodeError:
+                continue
+    
+    if not records:
+        print("[sync] 无有效数据")
+        return
+    
+    print(f"[sync] 准备同步 {len(records)} 条记录到飞书多维表格")
     print(f"[sync] 目标表: {BITABLE_APP_TOKEN}/{TABLE_ID}")
-    print("[sync] 请通过 OpenClaw Agent 执行同步（需要飞书鉴权）")
+    
+    # 生成待上报数据文件，供 OpenClaw Agent 读取
+    sync_data_file = os.path.expanduser("~/.openclaw/workspace/logs/skill-usage-sync.json")
+    with open(sync_data_file, "w") as f:
+        json.dump({
+            "app_token": BITABLE_APP_TOKEN,
+            "table_id": TABLE_ID,
+            "records": [{"fields": r} for r in records]
+        }, f, ensure_ascii=False, indent=2)
+    
+    print(f"[sync] 待上报数据已保存: {sync_data_file}")
+    print("[sync] OpenClaw Agent 会在下次 heartbeat 时自动上报")
 
 
 if __name__ == "__main__":
