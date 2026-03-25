@@ -1,8 +1,8 @@
-# Bot Quality Monitor v3.0
+# Bot Quality Monitor v4.0
 
-**智能 Bot 健康监控与优化系统**
+**全自动 Bot 健康监控与优化系统** - P0/P1/P2 三层 Dashboard + 智能信号检测
 
-[![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/Chenlei105/bot-quality-monitor/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0-blue.svg)](https://github.com/Chenlei105/bot-quality-monitor/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
@@ -175,6 +175,15 @@ ROI得分 = 100 × (成功率×业务价值 - 平均成本) / 平均成本
 
 ## 版本历史
 
+### v4.0.0 (2026-03-25)
+- 🚀 P0/P1/P2 三层 Dashboard 系统
+- 🚀 自动化数据采集（Session Hook）
+- 🚀 数据归档机制（L1/L2 超期归档）
+- 🚀 场景识别引擎（8 种场景智能分类）
+- 🚀 月度/季度/年度汇总报告
+- 🚀 Plotly 交互式图表
+- 🚀 完全自动化，无需手动触发
+
 ### v3.0.0 (2026-03-24)
 - ✨ 三层数据架构（L1/L2/L3）
 - ✨ 三类智能信号自动检测
@@ -203,9 +212,25 @@ MIT License
 
 ## 相关链接
 
-- **GitHub**: https://github.com/Chenlei105/bot-quality-monitor
-- **PRD 文档**: https://www.feishu.cn/docx/LItfdgwQkovevexHxbTcFKkAnne
+### 文档
+
+- **项目总览**: [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md)
+- **安装指南**: [INSTALL.md](./INSTALL.md)
+- **更新指南**: [UPDATE_GUIDE.md](./UPDATE_GUIDE.md)
+- **集成指南**: [INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md)
+- **发布说明**: [RELEASE_v4.0.0.md](./RELEASE_v4.0.0.md)
+
+### GitHub
+
+- **仓库**: https://github.com/Chenlei105/bot-quality-monitor
+- **Issues**: https://github.com/Chenlei105/bot-quality-monitor/issues
+- **Discussions**: https://github.com/Chenlei105/bot-quality-monitor/discussions
+
+### 飞书文档
+
+- **PRD 产品需求**: https://www.feishu.cn/docx/LItfdgwQkovevexHxbTcFKkAnne
 - **技术设计**: https://www.feishu.cn/docx/GQv3dhvFCogxRHxrZwTcLe6EnUv
+- **Dashboard 设计**: https://www.feishu.cn/docx/NCDKdMNSzorSEOxHYodcmDLtnSf
 
 ---
 

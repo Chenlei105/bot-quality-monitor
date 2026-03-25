@@ -1,8 +1,8 @@
 {
   "name": "bot-quality-monitor",
-  "version": "2.1.0",
-  "description": "OpenClaw Bot 质量监控 Skill 体系 - 自动化监控 Bot 使用质量，提供数据驱动的优化建议",
-  "author": "小炸弹 💣",
+  "version": "4.0.0",
+  "description": "OpenClaw Bot 质量监控系统 - P0/P1/P2 三层 Dashboard + 自动化数据采集 + 智能信号检测",
+  "author": "小炸弹 💣 + 陈磊",
   "license": "MIT",
   "keywords": [
     "bot",
@@ -11,11 +11,14 @@
     "analytics",
     "dashboard",
     "feishu",
-    "openclaw"
+    "openclaw",
+    "p0-dashboard",
+    "p1-dashboard",
+    "p2-dashboard"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/skills"
+    "url": "https://github.com/Chenlei105/bot-quality-monitor.git"
   },
   "dependencies": {},
   "openclaw": {
@@ -27,10 +30,9 @@
     "bot-platform-insights"
   ],
   "scripts": {
-    "init": "scripts/init.sh",
-    "create-tables": "python3 scripts/create-tables.py",
-    "daily-report": "scripts/daily-report.sh",
-    "weekly-insights": "scripts/weekly-insights.sh",
-    "generate-dashboard": "python3 scripts/generate-dashboard.py"
+    "install": "hooks/install.sh",
+    "uninstall": "hooks/uninstall.sh",
+    "test": "python3 scripts/track-usage.py run '{\"scene\": \"test\"}'",
+    "sync": "python3 scripts/track-usage.py sync"
   }
 }
