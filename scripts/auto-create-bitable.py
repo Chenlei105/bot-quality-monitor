@@ -47,6 +47,13 @@ TABLES = [
             {"field_name": "scene", "type": 1},
             {"field_name": "completed", "type": 7},
             {"field_name": "duration_minutes", "type": 2},
+            # 新增：支持四维指标体系
+            {"field_name": "task_resolution", "type": 3, "property": {"options": ["已解决", "未解决", "进行中"]}},
+            {"field_name": "satisfaction_score", "type": 2},
+            {"field_name": "token_total", "type": 2},
+            {"field_name": "is_unexpected_interrupt", "type": 7},
+            {"field_name": "complexity", "type": 3, "property": {"options": ["简单", "中等", "复杂"]}},
+            {"field_name": "response_time_ms", "type": 2},
         ]
     },
     {
@@ -62,6 +69,17 @@ TABLES = [
             {"field_name": "error_rate", "type": 2},
             {"field_name": "health_score", "type": 2},
             {"field_name": "health_grade", "type": 1},
+            # 新增：支持四维指标体系
+            {"field_name": "task_resolution_rate", "type": 2},
+            {"field_name": "avg_satisfaction", "type": 2},
+            {"field_name": "avg_task_duration", "type": 2},
+            {"field_name": "avg_token_per_task", "type": 2},
+            {"field_name": "interrupt_rate", "type": 2},
+            {"field_name": "p99_response_time", "type": 2},
+            # 维度分数
+            {"field_name": "quality_score", "type": 2},
+            {"field_name": "efficiency_score", "type": 2},
+            {"field_name": "resource_score", "type": 2},
         ]
     },
     {
