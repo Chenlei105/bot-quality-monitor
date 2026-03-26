@@ -161,7 +161,7 @@ rm ~/.openclaw/workspace/skills/bot-quality-monitor/config.json
 ### 5. 跨企业数据未上报
 
 **症状**：
-- 中央表格（Xw4Tb5C8KagMiQswkdacNfVPn8e）没有其他用户的数据
+- 中央统计表格没有其他用户的数据
 - 只有自己的数据
 
 **可能原因**：

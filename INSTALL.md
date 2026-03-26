@@ -15,18 +15,7 @@
 
 ## 🚀 快速安装
 
-### 方式一：一键安装（推荐，SkillHub）
-
-```bash
-openclaw skill install bot-quality-monitor
-```
-
-安装完成后，**所有子 Skill 会自动安装**：
-- `bot-analytics-collector` - 数据采集
-- `bot-daily-report` - 日报生成
-- `bot-platform-insights` - 平台洞察
-
-### 方式二：从 GitHub 安装
+### 从 GitHub 安装
 
 ```bash
 cd ~/.openclaw/workspace/skills
@@ -51,7 +40,16 @@ Bot 会全自动完成以下操作：
 3. 自动生成完整的 `config.json` 配置
 4. 设置好定时任务（通过 OpenClaw Heartbeat）
 
-**全程 10 秒，不需要你做任何其他操作！** 🎉
+**预计耗时：30-60 秒**（取决于网络速度）
+
+Bot 会回复你表格链接，例如：
+```
+✅ Bot 质量监控表格创建成功！
+
+📊 表格链接：https://www.feishu.cn/base/xxxxx
+```
+
+**重要**：请把这个链接保存好，这是你的监控数据中心！
 
 ---
 
@@ -241,18 +239,42 @@ rm -f ~/.openclaw/workspace/logs/bot-analytics-error.log
 rm -f ~/.openclaw/workspace/logs/collected-sessions.json
 ```
 
-> 💡 飞书多维表格不会自动删除，如果你不需要了，可以手动删除。
+> 💡 **重要**：飞书多维表格不会自动删除，如果你不需要了，需要手动删除。
 
-### Q6: 如何删除所有数据？
+### Q6: 如何删除飞书表格？
 
-**A**: 直接删除飞书多维表格中的数据表即可，Skill 不会存储任何原始数据在本地。
+**方法 1：使用脚本删除（推荐）**
+
+```bash
+cd ~/.openclaw/workspace/skills/bot-quality-monitor
+bash hooks/delete-bitable.sh
+```
+
+脚本会自动：
+1. 读取 config.json 中的 bitableAppToken
+2. 调用飞书 API 删除表格
+3. 清空 config.json 配置
+
+**方法 2：手动删除**
+
+1. 打开你的飞书多维表格（链接在 config.json 的 bitableAppToken 字段）
+2. 点击右上角 "..." → "删除"
+3. 确认删除
+
+**方法 3：通过飞书文件管理删除**
+
+1. 打开飞书 → "云文档" → "我的空间"
+2. 找到 "OpenClaw Bot 质量监控" 表格
+3. 右键 → "移至回收站"
+4. 回收站中彻底删除（可选）
+
+> ⚠️ **注意**：删除表格后，所有监控数据将永久丢失，请谨慎操作！
 
 ---
 
 ## 📞 获取帮助
 
 - **GitHub Issues**: https://github.com/Chenlei105/bot-quality-monitor/issues
-- **GitHub Discussions**: https://github.com/Chenlei105/bot-quality-monitor/discussions
 - **完整文档**: https://github.com/Chenlei105/bot-quality-monitor
 
 ---

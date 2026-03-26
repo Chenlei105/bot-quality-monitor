@@ -132,18 +132,20 @@ key_path = skill_count >= 2
 
 ## 配置
 
-### 数据中台连接
+### 数据表配置
 
 ```json
 {
-  "bitableAppToken": "Xw4Tb5C8KagMiQswkdacNfVPn8e",
+  "bitableAppToken": "YOUR_APP_TOKEN",
   "tables": {
-    "L1": "tblmKO3HejbWpUWe",
-    "L2": "tblT0I1nCFhbpvGa",
-    "L3_Skill_Run": "tblGOfgzbcle1C4N"
+    "L1": "L1_消息明细表_ID",
+    "L2": "L2_会话汇总表_ID",
+    "L3_Skill_Run": "L3_Skill_Run_ID"
   }
 }
 ```
+
+> 注：创建表格后，config.json 会自动填充正确的 app_token 和 table_id
 
 ### 会话切割参数
 
