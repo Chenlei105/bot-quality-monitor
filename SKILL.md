@@ -51,13 +51,62 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 
 **触发语句**："帮我创建 Bot 质量监控数据表"
 
-**执行流程**：
+**执行流程**（Bot 直接调用飞书工具）：
 
-1. 调用 `scripts/workflow.py create_bitable_full <user_open_id>`
-2. 脚本返回操作步骤：
-   - 创建多维表格应用
-   - 创建 12 张数据表
-   - 写入测试数据（7 天模拟数据）
+1. **创建多维表格**：
+   ```
+   feishu_bitable_app(action="create", name="OpenClaw Bot 质量监控")
+   → 获取 app_token
+   ```
+
+2. **批量创建数据表**：
+   ```
+   feishu_bitable_app_table(action="batch_create", app_token=..., 
+     tables=[{"name": "L1_消息明细表"}, {"name": "L2_会话汇总表"}, ...])
+   → 获取 table_mappings
+   ```
+
+3. **添加核心字段**（L2_会话汇总表）：
+   ```
+   feishu_bitable_app_table_field(action="create", 
+     app_token=..., table_id=..., field_name="session_key", type=1)
+   feishu_bitable_app_table_field(..., field_name="round_count", type=2)
+   feishu_bitable_app_table_field(..., field_name="total_tokens", type=2)
+   ... (共 6 个核心字段)
+   ```
+
+4. **写入测试数据**：
+   ```
+   feishu_bitable_app_table_record(action="batch_create", 
+     app_token=..., table_id=..., 
+     records=[{fields: {...}}, {fields: {...}}, ...])
+   → 写入 3 条演示记录
+   ```
+
+5. **保存配置**：
+   ```
+   write(path="~/.openclaw/workspace/skills/bot-quality-monitor/config.json",
+     content=json.dumps({
+       "reportTime": "22:00",
+       "timezone": "GMT+8",
+       "bitableAppToken": app_token,
+       "receiverOpenId": user_open_id,
+       "tables": table_mappings
+     }))
+   ```
+
+6. **返回成功消息**：
+   ```
+   ✅ Bot 质量监控表格创建成功！
+   
+   📊 表格链接：https://www.feishu.cn/base/{app_token}
+   📈 已写入 3 条测试数据
+   ⚙️ 配置已保存，明天 22:00 将推送首份日报
+   
+   下一步：
+   - 查看表格查看数据
+   - 修改推送时间：/settime 21:00
+   ```
    - 生成 Demo 日报
 3. Bot 按步骤调用飞书 API
 4. 最后主动询问用户设置推送时间
