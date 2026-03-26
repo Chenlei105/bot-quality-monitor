@@ -57,79 +57,159 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 - 用户完全拥有和控制这个表格
 - 数据隔离：每个用户的表格相互独立
 
-**执行流程**（用户的 Bot 调用飞书工具）：
+**⚠️ 重要：你必须按顺序执行以下所有步骤，缺一不可！**
 
-1. **创建多维表格**：
-   ```
-   用户的 Bot 调用：
-   feishu_bitable_app(action="create", name="OpenClaw Bot 质量监控")
-   → 在用户的飞书空间创建表格
-   → 获取 app_token
-   ```
+### 第 1 步：创建飞书多维表格
 
-2. **批量创建数据表**：
-   ```
-   用户的 Bot 调用：
-   feishu_bitable_app_table(action="batch_create", app_token=..., 
-     tables=[{"name": "L1_消息明细表"}, {"name": "L2_会话汇总表"}, ...])
-   → 在用户的表格中创建 11 张数据表
-   → 获取 table_mappings
-   ```
+调用工具：
+```
+feishu_bitable_app(
+  action="create",
+  name="OpenClaw Bot 质量监控"
+)
+```
 
-3. **添加核心字段**（L2_会话汇总表）：
-   ```
-   用户的 Bot 调用：
-   feishu_bitable_app_table_field(action="create", 
-     app_token=..., table_id=..., field_name="session_key", type=1)
-   feishu_bitable_app_table_field(..., field_name="round_count", type=2)
-   feishu_bitable_app_table_field(..., field_name="total_tokens", type=2)
-   ... (共 6 个核心字段)
-   → 在用户的表格中添加字段
-   ```
+保存返回的 `app_token`（后续步骤需要）。
 
-4. **写入测试数据**：
-   ```
-   用户的 Bot 调用：
-   feishu_bitable_app_table_record(action="batch_create", 
-     app_token=..., table_id=..., 
-     records=[{fields: {...}}, {fields: {...}}, ...])
-   → 在用户的表格中写入 3 条演示记录
-   ```
+---
 
-5. **保存配置**（在用户的机器上）：
-   ```
-   用户的 Bot 执行：
-   write(path="~/.openclaw/workspace/skills/bot-quality-monitor/config.json",
-     content=json.dumps({
-       "reportTime": "22:00",
-       "timezone": "GMT+8",
-       "bitableAppToken": app_token,  # 用户自己的表格 token
-       "receiverOpenId": user_open_id,  # 用户自己的 open_id
-       "tables": table_mappings  # 用户自己的表格映射
-     }))
-   → 配置保存在用户的机器上
-   ```
+### 第 2 步：批量创建 11 张数据表
 
-6. **返回成功消息**（用户的 Bot 回复用户）：
-   ```
-   ✅ Bot 质量监控表格创建成功！
-   
-   📊 表格信息：
-   - 在你的飞书空间创建
-   - 链接：https://www.feishu.cn/base/{app_token}
-   - 你拥有完全控制权
-   
-   📈 测试数据：已写入 3 条演示记录
-   
-   ⚙️ 配置已保存：
-   - 数据采集已自动开始
-   - 明天 22:00 将推送首份日报
-   
-   🎯 下一步：
-   - 点击链接查看你的表格
-   - 修改推送时间：/settime 21:00
-   - 所有数据都在你的飞书空间，完全私密
-   ```
+调用工具：
+```
+feishu_bitable_app_table(
+  action="batch_create",
+  app_token=<第1步返回的app_token>,
+  tables=[
+    {"name": "L1_消息明细表"},
+    {"name": "L2_会话汇总表"},
+    {"name": "L3_每日指标汇总"},
+    {"name": "L3_三类信号表"},
+    {"name": "L0_Skill_Usage"},
+    {"name": "L3_Skill_ROI"},
+    {"name": "L3_Skill_Run"},
+    {"name": "L2_会话归档表"},
+    {"name": "L1_消息归档表"},
+    {"name": "L3_月度汇总表"},
+    {"name": "L3_季度汇总表"}
+  ]
+)
+```
+
+保存返回的表格 ID 映射（table_id 列表）。
+
+---
+
+### 第 3 步：为 L2_会话汇总表 添加字段
+
+找到 L2_会话汇总表的 table_id（从第 2 步返回结果中查找）。
+
+依次调用：
+```
+feishu_bitable_app_table_field(
+  action="create",
+  app_token=<第1步的app_token>,
+  table_id=<L2_会话汇总表的table_id>,
+  field_name="session_key",
+  type=1
+)
+
+feishu_bitable_app_table_field(
+  action="create",
+  app_token=<第1步的app_token>,
+  table_id=<L2_会话汇总表的table_id>,
+  field_name="round_count",
+  type=2
+)
+
+feishu_bitable_app_table_field(
+  action="create",
+  app_token=<第1步的app_token>,
+  table_id=<L2_会话汇总表的table_id>,
+  field_name="total_tokens",
+  type=2
+)
+```
+
+---
+
+### 第 4 步：写入 3 条测试数据
+
+调用工具：
+```
+feishu_bitable_app_table_record(
+  action="batch_create",
+  app_token=<第1步的app_token>,
+  table_id=<L2_会话汇总表的table_id>,
+  records=[
+    {"fields": {"session_key": "demo_session_1", "round_count": 5, "total_tokens": 2500}},
+    {"fields": {"session_key": "demo_session_2", "round_count": 3, "total_tokens": 1200}},
+    {"fields": {"session_key": "demo_session_3", "round_count": 8, "total_tokens": 4800}}
+  ]
+)
+```
+
+---
+
+### 第 5 步：保存配置到 config.json
+
+调用工具：
+```
+write(
+  path="~/.openclaw/workspace/skills/bot-quality-monitor/config.json",
+  content=<以下JSON内容>
+)
+```
+
+JSON 内容（**必须填入实际值**）：
+```json
+{
+  "reportTime": "22:00",
+  "timezone": "GMT+8",
+  "bitableAppToken": "<第1步返回的app_token>",
+  "receiverOpenId": "<从消息上下文获取的user_open_id>",
+  "tables": {
+    "L1": "<L1_消息明细表的table_id>",
+    "L2": "<L2_会话汇总表的table_id>",
+    "L3_daily": "<L3_每日指标汇总的table_id>",
+    "L3_signals": "<L3_三类信号表的table_id>",
+    "L0_usage": "<L0_Skill_Usage的table_id>",
+    "L3_roi": "<L3_Skill_ROI的table_id>",
+    "L3_run": "<L3_Skill_Run的table_id>",
+    "L2_archive": "<L2_会话归档表的table_id>",
+    "L1_archive": "<L1_消息归档表的table_id>",
+    "L3_monthly": "<L3_月度汇总表的table_id>",
+    "L3_quarterly": "<L3_季度汇总表的table_id>"
+  }
+}
+```
+
+---
+
+### 第 6 步：回复用户成功消息
+
+回复用户：
+```
+✅ **Bot 质量监控表格创建成功！**
+
+📊 **表格信息**：
+- 在你的飞书空间创建
+- 链接：https://www.feishu.cn/base/<第1步的app_token>
+- 你拥有完全控制权
+- 包含 12 张数据表（11 张 + 默认表）
+
+📈 **测试数据**：已写入 3 条演示记录
+
+⚙️ **配置已保存**：
+- 数据采集已自动开始
+- 明天 22:00 将推送首份日报
+
+🎯 **下一步**：
+- 点击链接查看你的表格
+- 修改推送时间：/settime 21:00
+
+**重要**：请把表格链接保存好，这是你的监控数据中心！
+```
    - 生成 Demo 日报
 3. Bot 按步骤调用飞书 API
 4. 最后主动询问用户设置推送时间
