@@ -93,8 +93,50 @@ python3 "$SKILL_DIR/scripts/track-usage.py" install '{"source": "github"}'
 echo "[install] 统计已记录到本地日志"
 echo "[install] 下次 sync 时将同步到服务器"
 echo ""
-echo "🎉 安装完成！下一步："
-echo "   对你的 Bot 说：帮我创建 Bot 质量监控数据表"
-echo "   Bot 会全自动创建多维表格和配置，10 秒搞定！"
-echo "   然后静待每天 22:00 接收健康度日报"
+echo "[install] 正在安装子 Skill..."
+# 自动安装子 Skill 到 skills 根目录
+SUB_SKILLS=("bot-analytics-collector" "bot-daily-report" "bot-platform-insights")
+# 获取 skills 根目录（当前 Skill 的上级目录就是 skills 根目录）
+PARENT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+# 当前 Skill 目录
+SKILL_PARENT="$SKILL_DIR"
+
+install_failed=()
+for skill in "${SUB_SKILLS[@]}"; do
+    if [ ! -d "$PARENT_DIR/$skill" ]; then
+        echo "[install]   安装 $skill..."
+        if [ -d "$SKILL_PARENT/$skill" ]; then
+            cp -R "$SKILL_PARENT/$skill" "$PARENT_DIR/$skill"
+            if [ $? -eq 0 ]; then
+                echo "[install]   ✓ $skill 安装成功"
+            else
+                echo "[install]   ✗ $skill 安装失败"
+                install_failed+=("$skill")
+            fi
+        else
+            echo "[install]   ✗ $skill 源不存在，跳过"
+            install_failed+=("$skill")
+        fi
+    else
+        echo "[install]   ✓ $skill 已存在，跳过"
+    fi
+done
+
+echo ""
+echo "🎉 安装完成！"
+if [ ${#install_failed[@]} -eq 0 ]; then
+    echo "✅ 所有 Skill 安装成功："
+    echo "   • bot-quality-monitor (主系统)"
+    echo "   • bot-analytics-collector (数据采集)"
+    echo "   • bot-daily-report (日报生成)"
+    echo "   • bot-platform-insights (平台洞察)"
+    echo ""
+    echo "下一步："
+    echo "   对你的 Bot 说：帮我创建 Bot 质量监控数据表"
+    echo "   Bot 会全自动创建多维表格和配置，10 秒搞定！"
+    echo "   然后静待每天 22:00 接收健康度日报"
+else
+    echo "⚠️  部分 Skill 安装失败，请检查后重试"
+    echo "   失败: ${install_failed[*]}"
+fi
 echo ""

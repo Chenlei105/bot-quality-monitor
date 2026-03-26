@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.0.0] - 2026-03-26
+
+### Added
+
+- ✨ GitHub 安装支持全自动子 Skill 安装 (`./hooks/install.sh` 自动复制子 Skill 到 skills 根目录)
+- ✨ GitHub 卸载支持全自动子 Skill 卸载 (`./hooks/uninstall.sh` 自动删除子 Skill)
+
+### Changed
+
+- 🔄 GitHub 安装体验优化，真正做到傻瓜式一键安装
+- 📝 安装完成输出更清晰，展示安装结果和下一步操作
+
+### Fixed
+
+- 🐛 GitHub 安装后子 Skill 找不到的问题（子 Skill 留在父目录内，OpenClaw 扫描不到）
+
+---
+
 ## [3.0.0] - 2026-03-24
 
 ### Added
