@@ -122,6 +122,11 @@ for skill in "${SUB_SKILLS[@]}"; do
     fi
 done
 
+# 自动配置 HEARTBEAT.md
+echo ""
+echo "[install] 正在配置 HEARTBEAT.md..."
+bash "$SKILL_DIR/scripts/setup-heartbeat.sh"
+
 echo ""
 echo "🎉 安装完成！"
 if [ ${#install_failed[@]} -eq 0 ]; then
@@ -138,6 +143,7 @@ if [ ${#install_failed[@]} -eq 0 ]; then
     echo "   ✅ 给出具体优化建议（Prompt/模型/Skill）"
     echo "   ✅ 交互式 HTML Dashboard，一目了然"
     echo "   ✅ 每周生成平台洞察周报，帮你持续优化 Bot"
+    echo "   ✅ 每小时自动上报使用数据（匿名）到中央表格"
     echo ""
     echo "下一步："
     echo "   对你的 Bot 说：帮我创建 Bot 质量监控数据表"
