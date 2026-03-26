@@ -42,7 +42,10 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 
 1. 执行 `scripts/auto-create-bitable.py` 创建飞书多维表格
 2. 生成 12 张数据表
-3. 输出欢迎指南（读取 `references/post-create-welcome.md`）
+3. **自动创建测试数据**（模拟过去 7 天的数据）
+4. **自动生成并推送 Demo 日报**
+5. **主动询问用户设置推送时间**
+6. 输出欢迎指南（读取 `references/post-create-welcome.md`）
 
 **回复格式**：
 ```
@@ -50,23 +53,52 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 📊 将创建 12 张数据表...
 ✅ 创建成功！
 
-🎉 Bot Quality Monitor 安装完成！
+📈 正在生成测试数据（模拟过去 7 天）...
+   - 已生成: 156 个会话
+   - 已生成: 892 条消息
+   - 已生成: 每日指标汇总
 
-✅ 已完成
-- L1 消息明细表
-- L2 会话汇总表  
-- L3 每日指标汇总
-- L3 Signal Alerts（信号预警）
-- L3 Skill ROI（Skill 性价比）
-- L3 Skill Run（Skill 运行记录）
-- L0 Skill Usage（使用统计）
-- L1/L2 归档表
-- L3 月度/季度/年度汇总表
+📊 正在生成 Demo 日报...
+✅ Demo 日报已生成并推送给你！
 
-📋 配置已保存到 config.json
-⏰ 定时任务已设置（通过 OpenClaw Heartbeat）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Bot 质量监控日报 - DEMO 示例
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+🏃 综合健康度: 82 分
+├─ 质量维度: 85 分
+├─ 效率维度: 80 分
+└─ 资源维度: 78 分
+
+📈 会话数: 156 (+12%)
+✅ 完成率: 89% (+5%)
+🔄 纠错率: 4% (-2%)
+
+━━━━━━━━━━ 三类信号 ━━━━━━━━━━
+🟢 高分低用: 1 个 Bot
+🔴 低分高风险: 1 个 Bot
+⚠️ 高风险场景: 1 个
+
+━━━━━━━━━━ 改进建议 ━━━━━━━━━━
+1. 📝 文档处理场景 Prompt 建议优化
+2. 🤖 推荐 Claude Sonnet 处理代码任务
+3. 🛠️ 推荐安装 docx-processor Skill
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 这是 Demo 示例，展示正式日报的样式
+📁 完整 Dashboard: ~/.openclaw/workspace/reports/p0-dashboard-20260326.html
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⏰ 设置推送时间
+
+你希望每天什么时候收到日报？
+
+💡 回复格式：
+   /settime 20:00  （晚上 8 点）
+   /settime 9:00   （早上 9 点）
+   
+   或者直接说："设为晚上 8 点" / "改成早上 9 点"
 
 🔑 授权检查（重要）
 
@@ -111,6 +143,8 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 | /health | 查看当前健康度评分 | /health |
 | /dashboard | 获取 HTML Dashboard 链接 | /dashboard |
 | /diagnose <场景> | 诊断特定场景问题 | /diagnose 文档处理 |
+| /settime | 设置推送时间 | /settime 20:00 |
+| /settz | 设置时区 | /settz GMT+8 |
 | /help | 查看帮助 | /help |
 
 3️⃣ 等待日报
@@ -285,6 +319,18 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 /help
    显示帮助信息
 
+/settime <时间>
+   设置日报推送时间
+   示例: /settime 20:00 或 /settime 9:00
+
+/settz <时区>
+   设置时区
+   示例: /settz GMT+8 或 /settz UTC
+
+/createdemo
+   重新生成测试数据并推送 Demo 日报
+   示例: /createdemo
+
 ━━━━━━━━━━ 日常使用 ━━━━━━━━━━
 
 ✅ 数据采集：全自动，Heartbeat 每分钟采集
@@ -358,6 +404,36 @@ GitHub: https://github.com/Chenlei105/bot-quality-monitor
 - PST / GMT-8（洛杉矶）
 - EST / GMT-5（纽约）
 - JST / GMT+9（东京）
+
+---
+
+### 命令 8：/createdemo 重新生成 Demo
+
+**触发语句**：`/createdemo` 或 "生成 Demo" 或 "再看 Demo"
+
+**处理流程**：
+
+1. 删除现有测试数据
+2. 重新生成过去 7 天的模拟数据
+3. 生成 Demo 日报并推送
+
+**回复格式**：
+```
+📈 正在重新生成测试数据...
+   - 已生成: 156 个会话
+   - 已生成: 892 条消息
+
+📊 正在生成 Demo 日报...
+✅ Demo 日报已推送给你！
+
+（Demo 日报内容同上）
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 这是 Demo 示例，展示正式日报的样式
+📁 完整 Dashboard: ~/.openclaw/workspace/reports/p0-dashboard-YYYYMMDD.html
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 ---
 
