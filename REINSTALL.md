@@ -13,7 +13,22 @@
 
 ## 完整操作步骤
 
-### 第一步：彻底卸载
+> ⚠️ **重要顺序**：先删除飞书多维表格 → 再卸载 Skill → 最后删除目录
+
+### 第一步：删除飞书多维表格（可选）
+
+如果你想删除飞书上的数据，先执行：
+
+```bash
+# 方式一：用脚本删除
+cd ~/.openclaw/workspace/skills/bot-quality-monitor
+./hooks/delete-bitable.sh
+
+# 方式二：直接去飞手删除
+# 飞书 → 云空间 → 多维表格 → 删除 Bot Quality Monitor
+```
+
+### 第二步：卸载 Skill
 
 ```bash
 # 1. 进入 Skill 目录
