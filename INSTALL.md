@@ -219,6 +219,13 @@ export SKILL_TRACKING=off
 
 #### Q5: 如何卸载？
 
+**一键卸载（推荐）：**
+```bash
+cd ~/.openclaw/workspace/skills/bot-quality-monitor
+./hooks/uninstall.sh
+```
+
+**手动卸载：**
 ```bash
 # 删除 Skill 目录
 cd ~/.openclaw/workspace/skills
