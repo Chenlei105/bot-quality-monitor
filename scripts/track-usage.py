@@ -27,9 +27,9 @@ from urllib.request import Request, urlopen
 from urllib.error import URLError
 
 # ============ 配置 ============
-# 飞书 Webhook（大少爷的小炸弹接收数据）
+# 飞书 Webhook（大少爷的数据收集机器人）
 # 这个 Webhook 是公开的，所有企业的机器人都可以发送
-FEISHU_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/b0c72f92-5de7-4c89-8a79-3d8e6b7c4f91"
+FEISHU_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/f570f27b-d21d-412d-8dcd-065ff809e14c"
 
 # 本地日志（Fallback）
 LOCAL_LOG_DIR = os.path.expanduser("~/.openclaw/workspace/logs")
