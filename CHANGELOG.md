@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.0.1] - 2026-03-27
+
+### Added
+- 完整的错误处理机制（重试、降级、通知）
+- 性能优化（增量采集、批量写入、限流保护）
+- Webhook 自动入库（每 10 分钟检查）
+- docs/QUICK_START.md - 5 分钟快速开始指南
+- docs/TROUBLESHOOTING.md - 故障排查指南
+- docs/DATA-ISOLATION.md - 数据隔离说明
+- docs/AUTHORIZATION.md - 授权模型文档
+
+### Changed
+- 文件结构大幅简化（归档 11 个过时文件到 .archive/）
+- README.md 优化（简化导航，突出核心文档）
+- 明确"用户的 Bot"创建表格（不是小炸弹）
+- 时间预期从"10 秒"改为"30-60 秒"（更准确）
+- 新增"实现状态"章节（已完成 vs 开发中）
+
+### Fixed
+- 跨企业数据收集权限问题（改用 Webhook 中转）
+- 配置文件管理混乱（统一 config.json + HEARTBEAT.md）
+- 授权模型不清晰（补充分层授权文档）
+
+### Deprecated
+- p0/p1/p2-dashboard/（合并到子 Skills）
+- scripts/auto-create-*.py（被 create-bitable.py 替代）
+- scripts/central-api-server.py（未使用的备用方案）
+- scripts/webhook-handler.py（功能已集成到 HEARTBEAT）
+
+---
+
 ## [4.0.0] - 2026-03-26
 
 ### Added

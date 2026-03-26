@@ -1,6 +1,6 @@
 {
   "name": "bot-quality-monitor",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "OpenClaw Bot 质量监控系统 - P0/P1/P2 三层 Dashboard + 自动化数据采集 + 智能信号检测",
   "author": "小炸弹 💣 + 陈磊",
   "license": "MIT",
