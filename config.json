@@ -1,4 +1,19 @@
 {
   "reportTime": "22:00",
-  "timezone": "GMT+8"
+  "timezone": "GMT+8",
+  "bitableAppToken": "VAZ8bBiBFadVcfsexUWcYrWKnAf",
+  "receiverOpenId": "ou_baa3525cf6cb5c0fc1ce4e26753d812d",
+  "tables": {
+    "L1_消息明细表": "tblKEUjfIDuBnP1E",
+    "L2_会话汇总表": "tblmS61XYopaoXCj",
+    "L3_每日指标汇总": "tblpoz9zjVLWFEIy",
+    "L3_三类信号表": "tblQ7mqV40ZLDY0s",
+    "L0_Skill_Usage": "tblrV6K2fKvto4zf",
+    "L3_Skill_ROI": "tblw2YgWrm4iVOvb",
+    "L3_Skill_Run": "tbl1CfWANEpR7TPw",
+    "L2_会话归档表": "tblslX0oC1DFL6We",
+    "L1_消息归档表": "tbl2pJrmGkoJVZbY",
+    "L3_月度汇总表": "tblNN9YiJflHqvGB",
+    "L3_季度汇总表": "tblZLUr83xH2xtzP"
+  }
 }
