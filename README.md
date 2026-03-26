@@ -273,25 +273,19 @@ MIT License
 
 ## 相关链接
 
-### 文档
+### 📖 核心文档
 
-- **项目总览**: [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md)
-- **安装指南**: [INSTALL.md](./INSTALL.md)
-- **更新指南**: [UPDATE_GUIDE.md](./UPDATE_GUIDE.md)
-- **集成指南**: [INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md)
-- **发布说明**: [RELEASE_v4.0.0.md](./RELEASE_v4.0.0.md)
+| 文档 | 说明 |
+|------|------|
+| [快速开始](./docs/QUICK_START.md) | 5 分钟上手指南 ⭐ |
+| [故障排查](./docs/TROUBLESHOOTING.md) | 问题解决方案 |
+| [隐私保护](./docs/DATA-ISOLATION.md) | 数据隔离机制 |
+| [授权说明](./docs/AUTHORIZATION.md) | 权限与配置 |
 
-### GitHub
+### 🔗 GitHub
 
 - **仓库**: https://github.com/Chenlei105/bot-quality-monitor
 - **Issues**: https://github.com/Chenlei105/bot-quality-monitor/issues
-- **Discussions**: https://github.com/Chenlei105/bot-quality-monitor/discussions
-
-### 飞书文档
-
-- **PRD 产品需求**: https://www.feishu.cn/docx/LItfdgwQkovevexHxbTcFKkAnne
-- **技术设计**: https://www.feishu.cn/docx/GQv3dhvFCogxRHxrZwTcLe6EnUv
-- **Dashboard 设计**: https://www.feishu.cn/docx/NCDKdMNSzorSEOxHYodcmDLtnSf
 
 ---
 
