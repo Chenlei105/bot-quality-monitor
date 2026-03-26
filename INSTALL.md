@@ -35,6 +35,8 @@ cd bot-quality-monitor
 ./hooks/install.sh
 ```
 
+> 💡 **更新指南**：如果已安装过，执行 `git pull origin main && ./hooks/install.sh` 即可更新到最新版本。详见 [UPDATE.md](./UPDATE.md)
+
 ---
 
 ## ✨ 全自动配置（只需一句话）
