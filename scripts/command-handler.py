@@ -20,8 +20,8 @@ import json
 import os
 from datetime import datetime
 
-# 技能目录
-SKILL_DIR = os.path.dirname(os.path.abspath(__file__))
+# 技能目录（上级目录）
+SKILL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_FILE = os.path.join(SKILL_DIR, "config.json")
 
 def load_config():
