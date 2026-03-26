@@ -70,6 +70,22 @@ rm -f ~/.openclaw/workspace/skills/bot-quality-monitor/config.json
 2. 或者直接去飞书云空间 → 多维表格，搜索包含 "Bot Quality Monitor" 或 "L1_" "L2_" "L3_" 的表格
 3. 删除这些表格即可
 
+### 方法四：用脚本删除（命令行操作）
+
+如果你在服务器上直接操作，也可以用我们提供的脚本：
+
+```bash
+cd ~/.openclaw/workspace/skills/bot-quality-monitor
+./hooks/delete-bitable.sh
+```
+
+脚本会：
+1. 让你选择删除方式（输入 App Token / 让 Bot 帮忙查 / 取消）
+2. 确认后才执行删除
+3. 提供飞书手动操作替代方案
+
+> ⚠️ 脚本需要你的 Bot 有多维表格管理权限才能真正删除。
+
 ---
 
 ### 确认删除干净
