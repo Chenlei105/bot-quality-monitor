@@ -287,15 +287,74 @@ GitHub: https://github.com/Chenlei105/bot-quality-monitor
 
 ## 数据表结构
 
+### L1_消息明细表
+
+存储每条消息的详细信息
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| session_key | 文本 | 会话 ID |
+| message_id | 文本 | 消息 ID |
+| sender_id | 文本 | 发送者 ID |
+| scene | 单选 | 场景分类 |
+| is_correction | 复选框 | 是否包含纠错信号 |
+| create_time | 日期 | 创建时间 |
+
+### L2_会话汇总表
+
+存储每个会话的汇总数据，支持四维指标体系
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| session_key | 文本 | 会话 ID |
+| scene | 单选 | 场景分类 |
+| turns | 数字 | 对话轮数 |
+| corrections | 数字 | 纠错次数 |
+| completed | 复选框 | 是否完成 |
+| duration_minutes | 数字 | 会话时长（分钟） |
+| task_resolution | 单选 | 任务解决状态（已解决/未解决/进行中） |
+| satisfaction_score | 数字 | 满意度评分（0-100） |
+| token_total | 数字 | 单次任务总 Token |
+| is_unexpected_interrupt | 复选框 | 非预期中断标记 |
+| complexity | 单选 | 任务复杂度（简单/中等/复杂） |
+| response_time_ms | 数字 | 响应时长（毫秒） |
+
+### L3_每日指标汇总
+
+存储每日的聚合指标，支持四维健康分计算
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| date | 文本 | 日期 |
+| total_sessions | 数字 | 会话数 |
+| total_messages | 数字 | 消息数 |
+| completion_rate | 数字 | 完成率 |
+| correction_rate | 数字 | 纠错率 |
+| health_score | 数字 | 综合健康分 |
+| health_grade | 文本 | 健康等级 |
+| task_resolution_rate | 数字 | 任务解决率 |
+| avg_satisfaction | 数字 | 平均满意度 |
+| avg_task_duration | 数字 | 平均任务时长 |
+| avg_token_per_task | 数字 | 平均 Token 消耗 |
+| interrupt_rate | 数字 | 非预期中断率 |
+| p99_response_time | 数字 | P99 响应时长 |
+| quality_score | 数字 | 质量维度得分 |
+| efficiency_score | 数字 | 效率维度得分 |
+| resource_score | 数字 | 资源维度得分 |
+
+### 其他数据表
+
 | 表名 | 说明 |
 |------|------|
-| L1_消息明细 | 每条消息一行 |
-| L2_会话汇总 | 每个会话一行 |
-| L3_每日指标汇总 | 每日聚合数据 |
 | L3_Signal_Alerts | 三类智能信号 |
 | L3_Skill_ROI | Skill 性价比 |
 | L3_Skill_Run | 多 Skill 协作记录 |
 | L0_Skill_Usage | 使用统计 |
+| L2_会话归档 | 会话归档 |
+| L1_消息归档 | 消息归档 |
+| L3_月度汇总 | 月度聚合 |
+| L3_季度汇总 | 季度聚合 |
+| L3_年度汇总 | 年度聚合 |
 
 ---
 
