@@ -1,8 +1,8 @@
-# Bot Quality Monitor v4.0.1
+# Bot Quality Monitor v5.0
 
-**全自动 Bot 健康监控与优化系统** - P0/P1/P2 三层 Dashboard + 智能信号检测
+**全自动 Bot 健康监控与优化系统** - 飞书卡片日报 + 平台级统计 + 智能信号检测
 
-[![Version](https://img.shields.io/badge/version-4.0.1-blue.svg)](https://github.com/Chenlei105/bot-quality-monitor/releases)
+[![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)](https://github.com/Chenlei105/bot-quality-monitor/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---

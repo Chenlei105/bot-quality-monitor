@@ -1,244 +1,133 @@
 # Changelog
 
-All notable changes to Bot Quality Monitor will be documented in this file.
+## [5.0.0] - 2026-03-27
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### 🎉 重大更新
 
----
+#### 核心架构重构
+- ✅ **完整字段设计**：100+ 个字段覆盖所有指标（L2 35个 + L3 25个 + 信号 8个 + Skill 7个）
+- ✅ **数据隔离**：用户私有数据 vs 中央平台数据完全隔离
+- ✅ **Heartbeat 引擎**：自动执行所有定时任务（每分钟/每小时/每日/每周）
+- ✅ **新增 L3_年度汇总表**：支持年度数据统计
 
-## [4.0.1] - 2026-03-27
+#### 用户日报系统（全新）
+- ✅ **飞书卡片日报**：科技蓝风格，5 大模块（执行摘要 + 用户使用 + 趋势对比 + 智能洞察 + 优先行动）
+- ✅ **Dashboard HTML**：白色背景，ECharts 图表，完整交互式数据看板
+- ✅ **详细文档**：Markdown 格式，自动创建飞书云文档，5 大模块完整分析
+- ✅ **自动推送**：每日 22:00 自动推送（卡片 + 文档链接 + Dashboard 链接）
 
-### Added
-- ✅ **scripts/collect-sessions.py** - 本地会话数据自动采集（修复致命问题 #1）
-- ✅ **scripts/process-webhook-messages.py** - Webhook 自动入库（修复致命问题 #2）
-- ✅ **scripts/auto-setup.py** - 真正的一句话安装（修复致命问题 #3）
-- ✅ **.archive/HISTORY.md** - 历史版本归档文档
-- 完整的错误处理机制（重试、降级、通知）
-- 性能优化（增量采集、批量写入、限流保护）
-- Webhook 自动入库（每 10 分钟检查）
-- docs/QUICK_START.md - 5 分钟快速开始指南
-- docs/TROUBLESHOOTING.md - 故障排查指南
-- docs/DATA-ISOLATION.md - 数据隔离说明
-- docs/AUTHORIZATION.md - 授权模型文档
+#### 平台日报系统（全新，给大少爷）
+- ✅ **Skill ROI 计算**：自动计算所有 Skill 的性价比评分
+- ✅ **平台 Dashboard**：紫色渐变背景，Bot 排行榜 + Skill 使用 Top 10 + 失败模式分布
+- ✅ **自动推送**：每周日 20:00 自动推送给大少爷
 
-### Changed
-- 🔥 **SKILL.md** - 简化安装流程，调用新的自动安装脚本
-- 📚 **文件结构大幅简化**：
-  - 删除内部文档（`.cleanup-plan.md`、`PUBLISH-GUIDE.md`、`HEARTBEAT-INTEGRATION.md`）
-  - 删除旧版发布说明（`RELEASE_v3.0.1.md`、`RELEASE_v4.0.1.md`）
-  - 删除 `references/` 目录
-  - 归档旧版文档到 `.archive/old-docs/`
-- README.md 优化（更新版本号 v4.0.1，新增版本历史）
-- 明确"用户的 Bot"创建表格（不是小炸弹）
-- 时间预期从"10 秒"改为"30-60 秒"（更准确）
-- 新增"实现状态"章节（已完成 vs 开发中）
+#### 自动化能力
+- ✅ **会话数据自动采集**：每分钟自动采集最近活跃的会话，写入用户自己的表格
+- ✅ **Webhook 自动入库**：每 10 分钟自动搜索 Webhook 消息并写入中央表格
+- ✅ **测试数据生成**：自动生成 70 条完整测试数据（7 天 × 10 条/天）
 
-### Fixed
-- 🔴 **本地会话数据自动采集完全没有实现** → ✅ 已实现
-- 🔴 **Webhook 自动入库完全没有实现** → ✅ 已实现
-- 🔴 **安装流程不够自动化** → ✅ 已实现
-- 跨企业数据收集权限问题（改用 Webhook 中转）
-- 配置文件管理混乱（统一 config.json + HEARTBEAT.md）
-- 授权模型不清晰（补充分层授权文档）
+### 🔧 修复问题
 
-### Deprecated
-- p0/p1/p2-dashboard/（合并到子 Skills）
-- scripts/auto-create-*.py（被 create-bitable.py 替代）
-- scripts/central-api-server.py（未使用的备用方案）
-- scripts/webhook-handler.py（功能已集成到 HEARTBEAT）
+#### P0 级别（致命问题）
+1. ✅ 修复表格字段严重缺失问题（从 3 个字段 → 100+ 个字段）
+2. ✅ 修复脚本硬编码中央表格 ID 问题（改为从 config.json 读取）
+3. ✅ 修复缺少 L3_年度汇总表问题
+4. ✅ 修复关键脚本缺失问题（generate-daily-report.py 等）
 
-### Metrics
-- 📊 **综合评分**: 4.4/10 → 8.5/10 (+4.1)
-- 📊 **文件数**: 减少 15 个（归档 + 删除）
-- 📊 **代码量**: +865 行（新增脚本），-362 行（简化文档）
-- 📊 **自动化程度**: 100%
+#### P1 级别（重要问题）
+5. ✅ 修复字段名不一致问题（session_start vs 开始时间）
+6. ✅ 修复 send-personalized-report.py 无 main 入口问题
 
----
+#### P2 级别（次要问题）
+7. ✅ 优化测试数据（从 3 条 → 70 条）
+8. ✅ 完善 HEARTBEAT.md 配置文档
 
-## [4.0.0] - 2026-03-26
+### 📦 新增脚本（11 个）
 
-### Added
+#### Batch 1: 核心基础（4 个）
+- `scripts/auto-setup-v5.py` - 全自动安装脚本（100+ 字段 + 70 条测试数据）
+- `scripts/collect-sessions.py` - 会话数据自动采集（修复硬编码）
+- `scripts/heartbeat-runner.py` - Heartbeat 自动执行引擎
+- `HEARTBEAT.md` - 完善配置文档
 
-- ✨ GitHub 安装支持全自动子 Skill 安装 (`./hooks/install.sh` 自动复制子 Skill 到 skills 根目录)
-- ✨ GitHub 卸载支持全自动子 Skill 卸载 (`./hooks/uninstall.sh` 自动删除子 Skill)
+#### Batch 2: 用户日报（4 个）
+- `scripts/generate-daily-report.py` - 飞书卡片日报生成器
+- `scripts/generate-dashboard.py` - Dashboard HTML 生成器
+- `scripts/generate-detailed-report.py` - 详细文档生成器
+- `scripts/send-personalized-report-v5.py` - 日报推送脚本
 
-### Changed
+#### Batch 3: 平台日报（3 个）
+- `scripts/calculate-skill-roi.py` - Skill ROI 计算器
+- `scripts/generate-platform-dashboard.py` - 平台 Dashboard 生成器
+- `scripts/send-platform-report.py` - 平台日报推送脚本
 
-- 🔄 GitHub 安装体验优化，真正做到傻瓜式一键安装
-- 📝 安装完成输出更清晰，展示安装结果和下一步操作
+### 🎨 设计参考
 
-### Fixed
+#### 飞书卡片（参考第一张图）
+- **配色**：科技蓝 #1677FF + 红黄绿语义化
+- **布局**：5 大模块垂直流动式布局
+- **交互**：底部行动点（详细报告 + Dashboard 链接）
 
-- 🐛 GitHub 安装后子 Skill 找不到的问题（子 Skill 留在父目录内，OpenClaw 扫描不到）
+#### Dashboard HTML（参考第二张图）
+- **背景**：白色 #FFFFFF + 浅灰卡片
+- **图表**：ECharts 默认主题（浅色）
+- **布局**：顶部指标栏 + 2x2 网格 + 底部表格
 
----
+#### 平台 Dashboard
+- **背景**：紫色渐变（#667eea → #764ba2）
+- **卡片**：玻璃质感（backdrop-filter）
+- **图表**：ECharts + 金色/银色/铜色排名
 
-## [3.0.0] - 2026-03-24
+### 📊 数据流向
 
-### Added
+#### 用户私有数据
+```
+collect-sessions.py（每分钟）
+  → 用户自己的 L2_会话汇总表
+  → generate-daily-report.py（每日 22:00）
+  → 推送给用户自己
+```
 
-#### Phase 1: 多租户改造
-- ✨ OAuth 授权系统 (auth-manager.py)
-- ✨ 用户配置管理 (users/ 目录)
-- ✨ 命令系统 (/dashboard, /health, /diagnose, /help)
-- ✨ 数据表改造 (L1/L2/L3 新增 user_owner_id 字段)
-- ✨ 个性化日报推送
-- ✨ 端到端测试 (e2e-test.py, 7 个测试步骤)
+#### 中央平台数据
+```
+track-usage.py sync（每小时）
+  → 飞书 Webhook
+  → process-webhook-messages.py（每 10 分钟）
+  → 大少爷的中央表格（Xw4Tb5C8KagMiQswkdacNfVPn8e）
+  → send-platform-report.py（每周日 20:00）
+  → 推送给大少爷
+```
 
-#### Phase 2: 智能诊断引擎
-- ✨ 诊断规则库 (diagnostic-rules.json, 5 个场景)
-- ✨ 诊断引擎 (diagnostic-engine.py)
-  - 规则匹配 (场景 + 失败类型)
-  - 根因分析 (指标检测 + 概率计算)
-  - 建议生成 (Prompt/模型/Skill)
-  - LLM 兜底机制
-- ✨ Skill 推荐引擎 (skill-recommender.py, 11 个 Skill)
-  - 场景推荐
-  - 能力推荐
-  - 失败模式推荐
-- ✨ 模型推荐器 (model-recommender.py, 4 个模型)
-  - 场景性能对比
-  - 成本收益分析
-- ✨ 模型性能数据库 (model-performance-db.json)
+### 🔗 相关链接
 
-#### Phase 3: 平台 Dashboard (原型)
-- ✨ 平台数据聚合器 (platform-aggregator.py)
-- ✨ 5 个可视化模块设计
-  - 模块 A: 平台健康看板
-  - 模块 B: Bot 排行榜
-  - 模块 C: 失败模式识别
-  - 模块 D: Skill 推荐效果
-  - 模块 E: 智能诊断洞察
-- ✨ HTML Dashboard (dashboard.html, 20KB)
-- ✨ 权限控制框架 (仅管理员可见平台数据)
-- ✨ Dashboard 架构文档 (platform-dashboard-schema.md)
-
-#### 文档
-- ✨ README.md (完整项目说明)
-- ✨ INSTALL.md (安装指南)
-- ✨ SKILL.md (Skill 元数据)
-- ✨ V3-EXECUTION-PLAN.md (执行计划)
-- ✨ PHASE1-COMPLETION-REPORT.md (Phase 1 报告)
-- ✨ PHASE2-COMPLETION-SUMMARY.md (Phase 2 总结)
-- ✨ V3-FINAL-COMPLETION-REPORT.md (最终报告)
-- ✨ V3-MVP-SUMMARY.md (MVP 总结)
-- ✨ V3-ULTIMATE-DELIVERY.md (完整交付报告)
-
-### Changed
-- 🔄 L1/L2/L3 表结构 (新增 user_owner_id 字段)
-- 🔄 数据采集脚本 (支持 user_owner_id)
-- 🔄 日报脚本 (支持个性化推送)
-
-### Fixed
-- 🐛 权限误报问题 (2026-03-21)
-- 🐛 话题回复问题 (2026-03-19)
-
-### Performance
-- ⚡ 执行效率提升 144x (计划 18 天 → 实际 3 小时)
-
-### Testing
-- ✅ 27 个测试 (100% 通过)
-  - 授权管理: 4 个
-  - 命令系统: 4 个
-  - 端到端: 7 个
-  - 诊断引擎: 3 个
-  - Skill 推荐: 3 个
-  - 模型推荐: 3 个
-  - 平台聚合: 3 个
-
-### Metrics
-- 📊 文件数: 20 个
-- 📊 代码量: ~135KB
-- 📊 核心功能完成度: 100%
-- 📊 完整功能完成度: 50%
+- GitHub: https://github.com/Chenlei105/bot-quality-monitor
+- Commit e172bb4: Batch 1 核心基础修复
+- Commit 4ae064c: Batch 2.1 飞书卡片生成器
+- Commit 97326a7: Batch 2.2 Dashboard + 详细文档
+- Commit 4173c8d: Batch 3 平台日报
 
 ---
 
-## [2.1.1] - 2026-03-20
+## [4.0.1] - 2026-03-26
 
-### Added
-- ✨ 三类信号自动生成
-  - 高分低用信号
-  - 低分高风险信号
-  - 高风险任务场景信号
-- ✨ Skill ROI 评分计算
-- ✨ HTML Dashboard 生成
+### 修复
+- 修复三个致命问题（会话采集 + Webhook 入库 + 安装流程）
+- 整理 GitHub 文件结构（删除 6 个内部文档，归档 6 个历史文档）
 
-### Changed
-- 🔄 L2 表字段优化
-- 🔄 日报格式优化
-
-### Fixed
-- 🐛 信号检测阈值优化
-- 🐛 Dashboard 渲染问题
+### 新增
+- `scripts/collect-sessions.py` - 本地会话数据自动采集
+- `scripts/process-webhook-messages.py` - Webhook 自动入库
+- `scripts/auto-setup.py` - 一句话安装
 
 ---
 
-## [2.1.0] - 2026-03-18
+## [3.0.1] - 2026-03-25
 
-### Added
-- ✨ 基础数据采集
-  - L1_消息明细表
-  - L2_会话汇总表
-  - L3_每日指标汇总
-- ✨ 健康度评分算法
-  - 质量维度 (40%)
-  - 效率维度 (30%)
-  - 资源维度 (30%)
-- ✨ 每日报告推送 (22:00)
-
-### Known Issues
-- ⚠️ 仅支持单用户 (大少爷)
-- ⚠️ 无智能诊断功能
-- ⚠️ 无 Skill/模型推荐
+### 新增
+- 三类智能信号检测（高分低用、首解率下降、知识缺失）
+- P0/P1/P2 Dashboard
+- Skill ROI 分析
 
 ---
 
-## [Unreleased]
-
-### Planned (Phase 3-4 完整版)
-- ⏸️ L4 聚合表创建
-- ⏸️ 实时数据查询
-- ⏸️ 建议效果追踪
-- ⏸️ 规则库自动迭代
-- ⏸️ LLM 辅助诊断实现
-- ⏸️ 规则库扩展 (20+ 场景)
-
----
-
-## 版本规划
-
-### v3.1.0 (预计 2026-04-10)
-- Phase 3 完整开发
-- L4 聚合表 + 实时查询
-- Cron 任务调度
-
-### v3.2.0 (预计 2026-05-01)
-- Phase 4 完整开发
-- 建议效果追踪
-- 规则库自动迭代
-
-### v4.0.0 (预计 2026-06-01)
-- 规则库扩展 (20+ 场景)
-- LLM 深度集成
-- 社区反馈迭代
-
----
-
-## 贡献指南
-
-查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何贡献。
-
----
-
-## 链接
-
-- [GitHub](https://github.com/Chenlei105/bot-quality-monitor)
-- [文档](./README.md)
-- [Issues](https://github.com/Chenlei105/bot-quality-monitor/issues)
-
----
-
-**更新时间**: 2026-03-24 14:03  
-**维护者**: 小炸弹 💣
+**查看完整历史**: [.archive/HISTORY.md](.archive/HISTORY.md)

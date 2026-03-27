@@ -5,7 +5,7 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 
 # Bot Quality Monitor
 
-**智能 Bot 健康监控系统 v4.0.1**
+**智能 Bot 健康监控系统 v5.0**
 
 ---
 
@@ -48,17 +48,21 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 
 **执行流程**:
 
-1. 调用自动安装脚本:
+1. 调用自动安装脚本 v5:
 ```bash
-python3 ~/.openclaw/workspace/skills/bot-quality-monitor/scripts/auto-setup.py <user_open_id>
+python3 ~/.openclaw/workspace/skills/bot-quality-monitor/scripts/auto-setup-v5.py <user_open_id>
 ```
 
 2. 脚本会输出 JSON 工作流,Bot 按步骤执行:
    - 步骤 1: 创建飞书多维表格应用
-   - 步骤 2: 批量创建 12 张数据表
-   - 步骤 3: 为 L2_会话汇总表 添加字段
-   - 步骤 4: 写入 3 条测试数据
-   - 步骤 5: 保存配置到 config.json
+   - 步骤 2: 批量创建 12 张数据表（包含 L3_年度汇总表）
+   - 步骤 3-6: 批量添加字段（100+ 个）
+     - L2_会话汇总表: 35 个字段
+     - L3_每日指标汇总: 25 个字段
+     - L3_三类信号表: 8 个字段
+     - L0_Skill_Usage: 7 个字段
+   - 步骤 7: 写入完整测试数据（70 条记录，7 天 × 10 条/天）
+   - 步骤 8: 保存配置到 config.json
 
 3. Bot 逐步执行每个工具调用
 
@@ -72,9 +76,10 @@ python3 ~/.openclaw/workspace/skills/bot-quality-monitor/scripts/auto-setup.py <
 - 在你的飞书空间创建
 - 链接: https://www.feishu.cn/base/<app_token>
 - 你拥有完全控制权
-- 包含 12 张数据表(11 张 + 默认表)
+- 包含 12 张数据表（含 L3_年度汇总表）
 
-📈 **测试数据**: 已写入 3 条演示记录
+📈 **完整字段**: 100+ 个字段已添加
+📊 **测试数据**: 已写入 70 条演示记录（7 天数据）
 
 ⚙️ **配置已保存**:
 - 数据采集已自动开始
@@ -280,7 +285,14 @@ GitHub: https://github.com/Chenlei105/bot-quality-monitor
 
 ## 版本
 
-v4.0.1 (2026-03-27)
+v5.0.0 (2026-03-27)
+
+**重大更新**:
+- ✅ 完整字段设计（100+ 个字段）
+- ✅ 用户日报（飞书卡片 + Dashboard + 详细文档）
+- ✅ 平台日报（给大少爷，Bot 排行榜 + Skill ROI）
+- ✅ Heartbeat 自动执行引擎
+- ✅ 数据隔离（用户私有 vs 中央平台）
 
 ---
 
