@@ -1,6 +1,6 @@
 ---
 name: bot-daily-report
-version: 4.0.0
+version: 5.0.0
 description: Bot 健康度日报生成器。每日 22:00 自动推送四维指标体系健康度日报，包含质量/效率/资源评分、异常红灯预警、Skill 使用分析、Bad Case 汇总。
 author: 陈磊 / 小炸弹 💣
 tags: [bot, analytics, daily-report, dashboard, quality-monitor, 4-dimension]

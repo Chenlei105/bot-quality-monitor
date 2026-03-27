@@ -1,7 +1,7 @@
 {
   "name": "bot-quality-monitor",
-  "version": "4.0.1",
-  "description": "OpenClaw Bot 质量监控系统 - P0/P1/P2 三层 Dashboard + 自动化数据采集 + 智能信号检测",
+  "version": "5.0.0",
+  "description": "OpenClaw Bot 质量监控系统 - 飞书卡片日报 + 平台级统计 + 自动化数据采集 + 智能信号检测",
   "author": "小炸弹 💣 + 陈磊",
   "license": "MIT",
   "keywords": [
