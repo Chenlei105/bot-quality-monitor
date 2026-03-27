@@ -40,14 +40,47 @@ def log(message, level="INFO"):
             f.write(log_message + "\n")
 
 def load_config():
-    """加载配置文件"""
+    """加载配置文件（从用户自己的 config.json）"""
     try:
         if not CONFIG_PATH.exists():
-            log("配置文件不存在,跳过采集", "WARN")
+            log("配置文件不存在,跳过采集（用户还未安装）", "WARN")
             return None
         
         with open(CONFIG_PATH, "r") as f:
             config = json.load(f)
+        
+        # 验证必要字段
+        if not config.get('bitableAppToken'):
+            log("配置文件缺少 bitableAppToken", "ERROR")
+            return None
+        
+        if not config.get('tables', {}).get('L2_会话汇总表'):
+            log("配置文件缺少 L2_会话汇总表 ID", "ERROR")
+            return None
+        
+        log(f"✓ 配置加载成功: app_token={config['bitableAppToken'][:10]}...")
+        return config
+    except Exception as e:
+        log(f"加载配置文件失败: {e}", "ERROR")
+        return None
+
+def get_user_table_ids(config):
+    """从配置文件获取用户自己的表格 ID"""
+    try:
+        app_token = config['bitableAppToken']
+        table_id = config['tables']['L2_会话汇总表']
+        
+        return {
+            'app_token': app_token,
+            'table_id': table_id
+        }
+    except Exception as e:
+        log(f"获取表格 ID 失败: {e}", "ERROR")
+        return None
+
+# ====== 旧代码（硬编码中央表格 ID）已删除 ======
+# CENTRAL_APP_TOKEN = "Xw4Tb5C8KagMiQswkdacNfVPn8e"  # 删除
+# CENTRAL_TABLE_ID = "tblT0I1nCFhbpvGa"  # 删除
         
         # 验证必要字段
         if "bitableAppToken" not in config or "tables" not in config:
@@ -145,19 +178,21 @@ def extract_session_metrics(session_key, history):
         user_owner_id = history.get('metadata', {}).get('sender_id', 'unknown')
         
         return {
-            "会话ID": session_key,
+            "session_id": session_key,
             "用户所有者ID": user_owner_id,
-            "Bot ID": "cli_a922b6c0b8b89bd1",
-            "Bot昵称": "小炸弹 💣",
-            "场景类型": scene_type,
-            "轮次数": len(user_messages),
-            "纠错次数": correction_count,
-            "工具调用次数": len(tool_calls),
-            "完成状态": completion_status,
-            "模型名称": model_name,
-            "开始时间": start_time,
-            "结束时间": end_time,
-            "创建时间": int(datetime.now().timestamp() * 1000)
+            "bot_id": "cli_a922b6c0b8b89bd1",
+            "bot_name": "小炸弹",
+            "scene_type": scene_type,
+            "turn_count": len(user_messages),
+            "correction_count": correction_count,
+            "api_calls": len(tool_calls),
+            "completion_status": completion_status,
+            "model_used": model_name,
+            "session_start": start_time,  # 修复字段名
+            "session_end": end_time,      # 修复字段名
+            "total_tokens": sum(m.get('usage', {}).get('total_tokens', 0) for m in assistant_messages),
+            "first_resolve": correction_count == 0,
+            "satisfaction_signal": "positive" if completion_status == "completed" else "negative"
         }
     except Exception as e:
         log(f"提取会话指标失败 ({session_key}): {e}", "ERROR")
@@ -169,18 +204,21 @@ def main():
     log("Bot 会话数据自动采集任务开始")
     log("=" * 60)
     
-    # 1. 加载配置
+    # 1. 加载配置（从用户自己的 config.json）
     config = load_config()
     if not config:
         log("配置未就绪,跳过本次采集")
         return
     
-    app_token = config["bitableAppToken"]
-    table_id = config["tables"].get("L2", "")
-    
-    if not table_id:
-        log("L2 表 ID 未配置,跳过采集", "ERROR")
+    table_info = get_user_table_ids(config)
+    if not table_info:
+        log("表格 ID 获取失败,跳过采集", "ERROR")
         return
+    
+    app_token = table_info['app_token']
+    table_id = table_info['table_id']
+    
+    log(f"✓ 使用用户表格: {app_token[:10]}.../{table_id}")
     
     # 2. 加载已采集会话
     collected = load_collected_sessions()
