@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平台级健康看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 30px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* 顶部标题 */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        /* 主容器 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* 指标卡片网格 */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .metric-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .metric-card .label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+        .metric-card .value {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+        .metric-card .trend {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+        
+        /* 图表网格 */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .chart-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 28px;
+        }
+        .chart-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            opacity: 0.95;
+        }
+        .chart {
+            width: 100%;
+            height: 320px;
+        }
+        
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        th {
+            font-weight: 600;
+            opacity: 0.85;
+            font-size: 13px;
+        }
+        td {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* 排名徽章 */
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+        .rank-2 { background: linear-gradient(135deg, #C0C0C0, #A9A9A9); color: #000; }
+        .rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; }
+        .rank-other { background: rgba(255, 255, 255, 0.2); color: #fff; }
+        
+        /* 全宽表格 */
+        .full-table {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 28px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>平台级健康看板</h1>
+        <div class="subtitle">2026-03-17 至 2026-03-27 | 全平台 12 个活跃 Bot</div>
+    </div>
+    
+    <div class="container">
+        <!-- 顶部指标 -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="label">总会话数</div>
+                <div class="value">1,856</div>
+                <div class="trend">较上周 +12.3%</div>
+            </div>
+            <div class="metric-card">
+                <div class="label">平均完成率</div>
+                <div class="value">88.5%</div>
+                <div class="trend">较上周 +2.1%</div>
+            </div>
+            <div class="metric-card">
+                <div class="label">活跃 Bot</div>
+                <div class="value">12 / 15</div>
+                <div class="trend">活跃率 80%</div>
+            </div>
+            <div class="metric-card">
+                <div class="label">Skill 总调用</div>
+                <div class="value">3,245</div>
+                <div class="trend">较上周 +18.7%</div>
+            </div>
+        </div>
+        
+        <!-- 图表区 -->
+        <div class="chart-grid">
+            <!-- Bot 排行榜 -->
+            <div class="chart-card">
+                <h3>Bot 排行榜 Top 10</h3>
+                <div id="bot-ranking" class="chart"></div>
+            </div>
+            
+            <!-- Skill 使用 Top 10 -->
+            <div class="chart-card">
+                <h3>Skill 使用 Top 10</h3>
+                <div id="skill-usage" class="chart"></div>
+            </div>
+        </div>
+        
+        <!-- 失败模式分布 -->
+        <div class="chart-grid">
+            <div class="chart-card">
+                <h3>失败模式分布</h3>
+                <div id="failure-pie" class="chart"></div>
+            </div>
+            
+            <!-- Skill ROI 排行 -->
+            <div class="chart-card">
+                <h3>Skill ROI 排行榜</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>Skill</th>
+                            <th>调用次数</th>
+                            <th>成功率</th>
+                            <th>ROI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="rank-badge rank-1">1</span></td>
+                            <td><strong>bot-quality-monitor</strong></td>
+                            <td>245</td>
+                            <td>95%</td>
+                            <td>92</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-badge rank-2">2</span></td>
+                            <td><strong>feishu-doc</strong></td>
+                            <td>198</td>
+                            <td>92%</td>
+                            <td>88</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-badge rank-3">3</span></td>
+                            <td><strong>stock-monitor</strong></td>
+                            <td>156</td>
+                            <td>89%</td>
+                            <td>85</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-badge rank-other">4</span></td>
+                            <td><strong>feishu-calendar</strong></td>
+                            <td>132</td>
+                            <td>96%</td>
+                            <td>90</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-badge rank-other">5</span></td>
+                            <td><strong>web-search</strong></td>
+                            <td>118</td>
+                            <td>98%</td>
+                            <td>94</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Skill 编排推荐 -->
+        <div class="full-table">
+            <h3 style="margin-bottom: 20px; font-size: 18px;">Skill 编排推荐</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>组合</th>
+                        <th>成功率</th>
+                        <th>建议</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: rgba(76, 175, 80, 0.1);">
+                        <td><strong>最优组合</strong></td>
+                        <td>feishu-calendar + bot-quality-monitor</td>
+                        <td>96%</td>
+                        <td>推荐使用</td>
+                    </tr>
+                    <tr style="background: rgba(76, 175, 80, 0.1);">
+                        <td><strong>最优组合</strong></td>
+                        <td>web-search + feishu-doc</td>
+                        <td>94%</td>
+                        <td>推荐使用</td>
+                    </tr>
+                    <tr style="background: rgba(244, 67, 54, 0.1);">
+                        <td><strong>高风险组合</strong></td>
+                        <td>stock-monitor + feishu-bitable</td>
+                        <td>55%</td>
+                        <td>权限冲突，避免同时使用</td>
+                    </tr>
+                    <tr style="background: rgba(244, 67, 54, 0.1);">
+                        <td><strong>高风险组合</strong></td>
+                        <td>feishu-doc + image-generate</td>
+                        <td>58%</td>
+                        <td>内存溢出，建议优化</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // Bot 排行榜
+        const botChart = echarts.init(document.getElementById('bot-ranking'));
+        botChart.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '15%', right: '4%', bottom: '3%', top: '3%', containLabel: true },
+            xAxis: { 
+                type: 'value',
+                axisLabel: { color: '#fff', fontSize: 11 },
+                splitLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+            },
+            yAxis: { 
+                type: 'category', 
+                data: ['智能客服', '文档助手', 'AI助手', '忙狗', '杰尼龟', '小炸弹'].reverse(),
+                axisLabel: { color: '#fff', fontSize: 12 }
+            },
+            series: [{
+                type: 'bar',
+                data: [220, 285, 348, 392, 456, 475].reverse(),
+                itemStyle: { 
+                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                        { offset: 0, color: '#FFD700' },
+                        { offset: 1, color: '#FFA500' }
+                    ]),
+                    borderRadius: [0, 6, 6, 0]
+                },
+                barWidth: '60%',
+                label: { show: true, position: 'right', color: '#fff', fontSize: 12 }
+            }]
+        });
+        
+        // Skill 使用 Top 10
+        const skillChart = echarts.init(document.getElementById('skill-usage'));
+        skillChart.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '20%', right: '4%', bottom: '3%', top: '3%', containLabel: true },
+            xAxis: { 
+                type: 'value',
+                axisLabel: { color: '#fff', fontSize: 11 },
+                splitLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+            },
+            yAxis: { 
+                type: 'category', 
+                data: ['image', 'calendar', 'search', 'monitor', 'doc'].reverse(),
+                axisLabel: { color: '#fff', fontSize: 12 }
+            },
+            series: [{
+                type: 'bar',
+                data: [118, 132, 156, 198, 245].reverse(),
+                itemStyle: { 
+                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                        { offset: 0, color: '#667eea' },
+                        { offset: 1, color: '#764ba2' }
+                    ]),
+                    borderRadius: [0, 6, 6, 0]
+                },
+                barWidth: '60%',
+                label: { show: true, position: 'right', color: '#fff', fontSize: 12 }
+            }]
+        });
+        
+        // 失败模式分布
+        const pieChart = echarts.init(document.getElementById('failure-pie'));
+        pieChart.setOption({
+            tooltip: { trigger: 'item' },
+            legend: { 
+                orient: 'vertical', 
+                left: 'left',
+                textStyle: { color: '#fff' }
+            },
+            series: [{
+                type: 'pie',
+                radius: '70%',
+                data: [
+                    { value: 32, name: '权限相关 (32次)' },
+                    { value: 28, name: '接口超时 (28次)' },
+                    { value: 18, name: '知识缺失 (18次)' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                label: { color: '#fff', fontSize: 12 },
+                itemStyle: {
+                    color: function(params) {
+                        const colors = ['#F44336', '#FF9800', '#52C41A'];
+                        return colors[params.dataIndex];
+                    }
+                }
+            }]
+        });
+        
+        // 响应式
+        window.addEventListener('resize', () => {
+            botChart.resize();
+            skillChart.resize();
+            pieChart.resize();
+        });
+    </script>
+</body>
+</html>
