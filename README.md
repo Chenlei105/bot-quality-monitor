@@ -29,6 +29,31 @@ export SKILL_TRACKING=off
 
 ---
 
+## 🚀 快速开始（30 秒安装）
+
+### 纯 Bot 对话安装（推荐，零命令行）
+
+**Step 1: 安装 Skill**
+```
+发送给 Bot: 帮我安装 bot-quality-monitor
+```
+
+**Step 2: 创建监控表格**
+```
+发送给 Bot: 帮我创建 Bot 质量监控数据表
+```
+
+**Step 3: 验证安装**
+```
+发送给 Bot: /health
+```
+
+**完成！** 🎉 从现在开始，Bot 会自动采集数据，每日 22:00 推送健康度日报。
+
+📖 **详细安装指南**: [INSTALL.md](INSTALL.md)
+
+---
+
 ## 概述
 
 Bot Quality Monitor 是一个全自动的 Bot 健康监控与优化系统，为您的 Bot 提供：

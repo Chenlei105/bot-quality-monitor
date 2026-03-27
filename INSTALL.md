@@ -1,290 +1,288 @@
-# Bot Quality Monitor 安装指南
+# 📦 安装指南
 
-**5 分钟快速上手，让你的 Bot 更智能！**
-
----
-
-## 📋 前提条件
-
-- ✅ 已安装 OpenClaw（[安装指南](https://docs.openclaw.ai)）
-- ✅ 已配置飞书机器人（或其他支持的平台）
-- ✅ 飞书账号（企业版或个人版均可）
-- ✅ 飞书机器人已授予多维表格权限
+Bot Quality Monitor 提供**两种安装方式**，您可以根据自己的习惯选择：
 
 ---
 
-## 🚀 快速安装
+## 🤖 方式一：纯 Bot 对话安装（推荐，零命令行）
 
-### 从 GitHub 安装
+**适合人群**：所有用户，尤其是不熟悉命令行的用户
+
+### Step 1: 安装 Skill
+
+**发送给 Bot**（任选其一）：
+```
+帮我安装 bot-quality-monitor
+```
+或
+```
+找一下 bot-quality-monitor 技能
+```
+
+Bot 会自动：
+1. 从 GitHub 下载 Skill
+2. 安装到 `~/.openclaw/workspace/skills/bot-quality-monitor/`
+3. 回复安装成功
+
+### Step 2: 创建监控表格
+
+**发送给 Bot**：
+```
+帮我创建 Bot 质量监控数据表
+```
+
+Bot 会自动：
+1. 在**你的飞书空间**创建多维表格
+2. 批量创建 12 张数据表
+3. 添加 100+ 个字段
+4. 写入 70 条测试数据（7 天数据）
+5. 保存配置到 `~/.openclaw/workspace/skills/bot-quality-monitor/config.json`
+
+**预计耗时**: 2-3 分钟
+
+### Step 3: 验证安装
+
+**发送给 Bot**：
+```
+/health
+```
+
+如果看到类似回复，说明安装成功：
+```
+📊 综合健康度: 82 分 (较昨日 +3)
+├─ 质量维度: 85 分 (+2)
+├─ 效率维度: 80 分 (+5)
+└─ 资源维度: 78 分 (+1)
+
+━━━━━━━━━━ 关键指标 ━━━━━━━━━━
+📈 会话数: 156 (+12%)
+✅ 完成率: 89% (+5%)
+🔄 纠错率: 4% (-2%)
+```
+
+### Step 4: 查看你的表格
+
+**发送给 Bot**：
+```
+给我看一下监控表格的链接
+```
+
+Bot 会回复飞书表格链接，点击即可查看。
+
+---
+
+## 💻 方式二：命令行安装（开发者推荐）
+
+**适合人群**：熟悉命令行、需要自定义配置的用户
+
+### Step 1: 克隆仓库
 
 ```bash
-cd ~/.openclaw/workspace/skills
+cd ~/.openclaw/workspace/skills/
 git clone https://github.com/Chenlei105/bot-quality-monitor.git
-cd bot-quality-monitor
-./hooks/install.sh
 ```
 
-> 💡 **更新指南**：如果已安装过，执行 `git pull origin main && ./hooks/install.sh` 即可更新到最新版本。详见 [UPDATE.md](./UPDATE.md)
+### Step 2: 自动安装
 
----
+**方式 2A: 通过 Bot 安装（推荐）**
 
-## ✨ 全自动配置（只需一句话）
-
-安装完成后，**对你的 Bot 说一句话**：
-
-> **帮我创建 Bot 质量监控数据表**
-
-Bot 会全自动完成以下操作：
-1. 创建飞书多维表格应用
-2. 自动创建 **12 张数据表**（含归档和统计）
-3. 自动生成完整的 `config.json` 配置
-4. 设置好定时任务（通过 OpenClaw Heartbeat）
-
-**预计耗时：30-60 秒**（取决于网络速度）
-
-Bot 会回复你表格链接，例如：
+发送给 Bot：
 ```
-✅ Bot 质量监控表格创建成功！
-
-📊 表格链接：https://www.feishu.cn/base/xxxxx
+帮我创建 Bot 质量监控数据表
 ```
 
-**重要**：请把这个链接保存好，这是你的监控数据中心！
-
----
-
-## ✅ 验证安装
-
-安装完成后，你可以：
-
-### 1. 检查 Skill 是否安装成功
+**方式 2B: 手动运行脚本**
 
 ```bash
-openclaw skill list | grep bot
+# 获取你的 open_id（从飞书复制）
+YOUR_OPEN_ID="ou_xxxxxxxxxxxxxx"
+
+# 运行安装脚本
+python3 ~/.openclaw/workspace/skills/bot-quality-monitor/scripts/auto-setup-v5.py $YOUR_OPEN_ID
 ```
 
-应该看到：
+脚本会输出 JSON 工作流，需要你的 Bot 执行。
+
+### Step 3: 验证安装
+
+```bash
+# 检查配置文件
+cat ~/.openclaw/workspace/skills/bot-quality-monitor/config.json
+
+# 测试健康度查询
+# 发送给 Bot: /health
 ```
-bot-quality-monitor      v4.0.0  智能 Bot 健康监控系统
-bot-analytics-collector  v4.0.0  Bot 对话数据采集器
-bot-daily-report         v4.0.0  Bot 健康度日报生成器
-bot-platform-insights    v4.0.0  Bot 平台级洞察引擎
-```
-
-### 2. 等待数据采集
-
-安装完成后，Heartbeat 会自动开始采集对话数据，**无需重启**。
-
-与 Bot 正常对话即可，数据会自动写入你的多维表格。
-
-### 3. 接收第一份日报
-
-安装后第二天 **22:00**，你会自动收到飞书私信推送的健康度日报，包含：
-- 📊 综合健康度评分（0-100）
-- 📈 7 天趋势图
-- 🔔 三类智能信号
-- 💡 改进建议
 
 ---
 
-## 📊 日常使用
+## ⚙️ 配置说明
 
-### 常用命令
-
-| 命令 | 说明 |
-|------|------|
-| `/health` | 查看当前健康度 |
-| `/dashboard` | 获取 Dashboard 链接 |
-| `/diagnose <场景>` | 诊断特定场景问题 |
-
-### 查看 Dashboard
-
-HTML Dashboard 保存在：
+### 配置文件位置
 ```
-~/.openclaw/workspace/reports/p0-dashboard-YYYYMMDD.html
+~/.openclaw/workspace/skills/bot-quality-monitor/config.json
 ```
 
-用浏览器打开即可查看交互式图表。
-
----
-
-## 🔧 进阶配置（可选）
-
-你可以编辑 `config.json` 自定义配置：
-
-### 自定义健康度权重
-
-```json
-{
-  "healthWeights": {
-    "quality": 0.40,
-    "efficiency": 0.30,
-    "resource": 0.30
-  }
-}
-```
-
-### 自定义信号阈值
-
-```json
-{
-  "signalThresholds": {
-    "highScoreLowUse": {
-      "minHealthScore": 85,
-      "maxWeeklyCount": 5
-    },
-    "lowScoreHighRisk": {
-      "minCorrectionRate": 0.10,
-      "minFailureCount": 5
-    }
-  }
-}
-```
-
-### 自定义业务价值权重
-
-```json
-{
-  "businessValue": {
-    "数据分析": 10,
-    "文档处理": 8,
-    "健康诊断": 5,
-    "搜索查询": 4,
-    "代码调试": 6,
-    "闲聊": 1,
-    "其他": 3
-  }
-}
-```
-
-### 修改报告时间或时区
-
+### 配置示例
 ```json
 {
   "reportTime": "22:00",
+  "timezone": "GMT+8",
+  "bitableAppToken": "YnD8bXLLqaURZGsGPJFceGaxnVf",
+  "receiverOpenId": "ou_baa3525cf6cb5c0fc1ce4e26753d812d",
+  "tables": {
+    "L2_会话汇总表": "tblxxxxxx",
+    "L3_每日指标汇总": "tblxxxxxx",
+    ...
+  }
+}
+```
+
+### 可自定义项
+
+#### 修改推送时间
+
+**发送给 Bot**：
+```
+/settime 21:00
+```
+
+或手动编辑 config.json：
+```json
+{
+  "reportTime": "21:00"
+}
+```
+
+#### 修改时区
+
+**发送给 Bot**：
+```
+/settz GMT+8
+```
+
+或手动编辑 config.json：
+```json
+{
   "timezone": "GMT+8"
 }
 ```
 
 ---
 
-## 🔐 权限检查清单
+## 🔍 验证安装成功
 
-安装前，请确保你的飞书机器人已开通以下权限：
+### 检查清单
 
-| 权限 | 说明 |
-|------|------|
-| 云文档 - 查看和编辑 | 读写多维表格 |
-| 消息 - 发送消息 | 推送日报 |
-| 日历 - 查看用户信息 | （不需要，可选） |
+- [ ] **Skill 已安装**: `ls ~/.openclaw/workspace/skills/bot-quality-monitor/`
+- [ ] **配置文件存在**: `~/.openclaw/workspace/skills/bot-quality-monitor/config.json`
+- [ ] **飞书表格已创建**: 打开配置文件中的 `bitableAppToken` 对应的表格链接
+- [ ] **表格包含 12 张表**: 在飞书表格中看到 12 张数据表
+- [ ] **L2 表有数据**: 查看 L2_会话汇总表，应该有 70 条测试数据
+- [ ] **Bot 响应 /health**: 发送 `/health` 能看到健康度数据
 
-如果授权失败，请重新授权：
+### 常见问题
+
+#### Q1: Bot 说"未安装该 Skill"
+**解决**：
 ```
-/openclaw feishu reauthorize
+帮我安装 bot-quality-monitor
+```
+
+#### Q2: 创建表格时报错"权限不足"
+**解决**：
+1. 确认你的飞书账号有创建多维表格的权限
+2. 尝试手动在飞书创建一个测试表格，如果能创建，说明有权限
+
+#### Q3: /health 返回"暂无数据"
+**正常情况**：刚安装时确实没有真实数据，需要：
+- 等待 24 小时数据积累
+- 或查看测试数据：发送 `/createdemo`
+
+#### Q4: 想重新安装
+**解决**：
+```bash
+# 删除旧的 Skill
+rm -rf ~/.openclaw/workspace/skills/bot-quality-monitor/
+
+# 重新安装（方式一的 Step 1）
+# 发送给 Bot: 帮我安装 bot-quality-monitor
 ```
 
 ---
 
-## ❓ 常见问题
+## 📊 安装后的第一步
 
-### Q1: 安装后数据没有自动采集？
+### 1. 查看你的监控表格
 
-**A**: 检查以下几点：
-1. Bot 是否正常运行（Heartbeat 每分钟触发）
-2. 多维表格权限是否正确（机器人是否能编辑）
-3. 查看日志：`~/.openclaw/workspace/logs/bot-analytics-error.log`
-4. 检查 `config.json` 是否配置正确（App Token 和 Table ID）
-
-### Q2: 没有收到日报？
-
-**A**: 检查以下几点：
-1. `receiverOpenId` 在 `config.json` 中是否正确
-2. 飞书机器人是否有发送私信权限
-3. 手动执行测试：
-```bash
-python3 ~/.openclaw/workspace/skills/bot-daily-report/scripts/generate-signal-alerts.py
-python3 ~/.openclaw/workspace/skills/bot-daily-report/scripts/generate-html-dashboard.py
+**发送给 Bot**：
+```
+给我看一下监控表格的链接
 ```
 
-### Q3: Dashboard 显示"暂无数据"？
+点击链接，你会看到：
+- 12 张数据表
+- L2_会话汇总表有 70 条测试数据
+- 100+ 个字段已就绪
 
-**A**: 数据采集需要时间积累，等待 24 小时后会有首日数据。
+### 2. 查看健康度
 
-### Q4: 如何关闭匿名使用统计？
-
-**A**: 设置环境变量：
-```bash
-export SKILL_TRACKING=off
+**发送给 Bot**：
+```
+/health
 ```
 
-#### Q5: 如何卸载？
+查看基于测试数据的健康度报告。
 
-**一键卸载（推荐）：**
-```bash
-cd ~/.openclaw/workspace/skills/bot-quality-monitor
-./hooks/uninstall.sh
+### 3. 生成 Dashboard
+
+**发送给 Bot**：
+```
+/dashboard
 ```
 
-**手动卸载：**
-```bash
-# 删除 Skill 目录
-cd ~/.openclaw/workspace/skills
-rm -rf bot-quality-monitor
-rm -rf bot-analytics-collector
-rm -rf bot-daily-report
-rm -rf bot-platform-insights
+Bot 会生成交互式 Dashboard HTML，可以用浏览器打开查看。
 
-# 删除本地日志
-rm -f ~/.openclaw/workspace/logs/bot-analytics-error.log
-rm -f ~/.openclaw/workspace/logs/collected-sessions.json
+### 4. 设置推送时间
+
+**发送给 Bot**：
+```
+/settime 21:00
 ```
 
-> 💡 **重要**：飞书多维表格不会自动删除，如果你不需要了，需要手动删除。
+修改日报推送时间（默认 22:00）。
 
-### Q6: 如何删除飞书表格？
+### 5. 开始真实使用
 
-**方法 1：使用脚本删除（推荐）**
-
-```bash
-cd ~/.openclaw/workspace/skills/bot-quality-monitor
-bash hooks/delete-bitable.sh
-```
-
-脚本会自动：
-1. 读取 config.json 中的 bitableAppToken
-2. 调用飞书 API 删除表格
-3. 清空 config.json 配置
-
-**方法 2：手动删除**
-
-1. 打开你的飞书多维表格（链接在 config.json 的 bitableAppToken 字段）
-2. 点击右上角 "..." → "删除"
-3. 确认删除
-
-**方法 3：通过飞书文件管理删除**
-
-1. 打开飞书 → "云文档" → "我的空间"
-2. 找到 "OpenClaw Bot 质量监控" 表格
-3. 右键 → "移至回收站"
-4. 回收站中彻底删除（可选）
-
-> ⚠️ **注意**：删除表格后，所有监控数据将永久丢失，请谨慎操作！
+从现在开始，正常与 Bot 对话，数据会自动积累：
+- 每分钟自动采集会话数据
+- 每日 22:00 自动推送健康度日报
+- 每周日 20:00 推送平台周报（给大少爷）
 
 ---
 
-## 📞 获取帮助
+## 🎯 下一步
 
-- **GitHub Issues**: https://github.com/Chenlei105/bot-quality-monitor/issues
-- **完整文档**: https://github.com/Chenlei105/bot-quality-monitor
+### 对于普通用户
+1. ✅ 安装完成
+2. ⏳ 等待 24 小时数据积累
+3. 📊 第二天 22:00 收到第一份完整日报
+
+### 对于开发者
+1. ✅ 安装完成
+2. 🔧 自定义配置（时间/时区/字段）
+3. 📈 接入自己的数据源（修改 collect-sessions.py）
 
 ---
 
-## 📜 版本信息
+## 📚 相关文档
 
-- **当前版本**: v4.0.0
-- **发布日期**: 2026-03-25
-- **作者**: 陈磊 / 小炸弹 💣
+- [README.md](README.md) - 项目介绍
+- [SKILL.md](SKILL.md) - Skill 使用说明
+- [CHANGELOG.md](CHANGELOG.md) - 版本更新日志
+- [HEARTBEAT.md](HEARTBEAT.md) - 定时任务配置
 
 ---
 
-**让你的 Bot 更智能、更健康！** 🚀
+**需要帮助？**
+- GitHub Issues: https://github.com/Chenlei105/bot-quality-monitor/issues
+- 发送给 Bot: `/help`

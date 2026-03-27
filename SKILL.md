@@ -13,7 +13,13 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 
 当用户意图匹配以下任一情况时,激活此 Skill:
 
-### 1. 创建数据表
+### 1. 安装与创建数据表
+
+**安装 Skill**:
+- 用户说: "帮我安装 bot-quality-monitor"
+- 用户说: "找一下 bot-quality-monitor 技能"
+
+**创建数据表**:
 - 用户说: "帮我创建 Bot 质量监控数据表"
 - 用户说: "创建质量监控表"
 - 用户说: "初始化质量监控"
@@ -36,6 +42,26 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 
 ## 命令响应
 
+### 命令 0: 安装 Skill（首次使用）
+
+**触发语句**: "帮我安装 bot-quality-monitor" 或 "找一下 bot-quality-monitor 技能"
+
+**执行流程**:
+1. Bot 自动从 GitHub 下载 Skill
+2. 安装到 `~/.openclaw/workspace/skills/bot-quality-monitor/`
+3. 回复安装成功
+
+**回复格式**:
+```
+✅ Skill 已安装: bot-quality-monitor v5.0
+
+📦 安装位置: ~/.openclaw/workspace/skills/bot-quality-monitor/
+
+🎯 下一步: 发送 "帮我创建 Bot 质量监控数据表" 创建监控表格
+```
+
+---
+
 ### 命令 1: 创建数据表
 
 **触发语句**: "帮我创建 Bot 质量监控数据表"
@@ -45,6 +71,8 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 - 表格创建在**用户自己的飞书空间**
 - 用户完全拥有和控制这个表格
 - 数据隔离: 每个用户的表格相互独立
+
+**前置条件**: 已安装 Skill（参考命令 0）
 
 **执行流程**:
 
