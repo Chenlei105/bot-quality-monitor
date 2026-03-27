@@ -9,7 +9,7 @@ dependencies: [bot-analytics-collector]
 
 # Bot Daily Report
 
-**Bot 健康度日报生成器 v4.0**
+**Bot 健康度日报生成器 v5.0**
 
 ---
 
@@ -234,7 +234,7 @@ Bot Daily Report 是 Bot Quality Monitor 系统的报告生成层，基于四维
 
 ## 版本历史
 
-### v4.0.0 (2026-03-26)
+### v5.0.0 (2026-03-27)
 - ✨ 四维指标体系（质量50% + 效率30% + 资源20%）
 - ✨ 异常维度独立红灯预警
 - ✨ 移动端风格日报格式（按图片设计）

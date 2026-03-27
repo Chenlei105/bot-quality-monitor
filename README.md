@@ -93,10 +93,10 @@ bot-platform-insights (平台洞察层)
 
 | Skill | 版本 | 说明 |
 |-------|------|------|
-| **bot-quality-monitor** | v4.0.0 | 元包（一键安装入口） |
-| **bot-analytics-collector** | v4.0.0 | 数据采集层：消息采集 + 会话切割 + 信号识别 |
-| **bot-daily-report** | v4.0.0 | 报告生成层：健康度日报 + HTML Dashboard + 智能信号 |
-| **bot-platform-insights** | v4.0.0 | 平台洞察层：Skill ROI + 编排推荐 + 失败模式识别 |
+| **bot-quality-monitor** | v5.0.0 | 元包（一键安装入口） |
+| **bot-analytics-collector** | v5.0.0 | 数据采集层：消息采集 + 会话切割 + 信号识别 |
+| **bot-daily-report** | v5.0.0 | 报告生成层：健康度日报 + HTML Dashboard + 智能信号 |
+| **bot-platform-insights** | v5.0.0 | 平台洞察层：Skill ROI + 编排推荐 + 失败模式识别 |
 
 ---
 
@@ -229,7 +229,7 @@ ROI得分 = 100 × (成功率×业务价值 - 平均成本) / 平均成本
 
 ## 版本历史
 
-### v4.0.1 (2026-03-27)
+### v5.0.0 (2026-03-27)
 - 🔥 **修复三个致命问题**：
   - ✅ 新增 `scripts/collect-sessions.py` - 本地会话数据自动采集
   - ✅ 新增 `scripts/process-webhook-messages.py` - Webhook 自动入库
@@ -288,11 +288,11 @@ ROI得分 = 100 × (成功率×业务价值 - 平均成本) / 平均成本
 
 | 功能 | 进度 | 预计完成 |
 |------|------|----------|
-| 完整字段创建 | 70% | v4.1.0 |
-| 7 天测试数据 | 50% | v4.1.0 |
-| Plotly 图表 | 80% | v4.1.0 |
-| 周报/月报 | 60% | v4.2.0 |
-| Skill ROI 分析 | 40% | v4.2.0 |
+| 完整字段创建 | 100% | v5.0.0 ✅ |
+| 7 天测试数据 | 100% | v5.0.0 ✅ |
+| ECharts 图表 | 100% | v5.0.0 ✅ |
+| 周报 | 100% | v5.0.0 ✅ |
+| Skill ROI 分析 | 100% | v5.0.0 ✅ |
 
 ### 📝 已知限制
 

@@ -63,7 +63,7 @@ cd bot-quality-monitor
 ### 安装输出示例
 
 ```
-[install] Bot Quality Monitor v4.0.0 安装中...
+[install] Bot Quality Monitor v5.0.0 安装中...
 [install] 正在检查 Python 依赖...
 [install] ✓ plotly 已安装
 [install] ✓ jinja2 已安装
@@ -489,4 +489,4 @@ git pull origin main
 
 ---
 
-*版本: 4.0.0 | 更新时间: 2026-03-26 | 作者: 陈磊 / 小炸弹 💣*
+*版本: 5.0.0 | 更新时间: 2026-03-27 | 作者: 陈磊 / 小炸弹 💣*
