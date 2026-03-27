@@ -1,6 +1,6 @@
 ---
 name: bot-analytics-collector
-version: 3.0.0
+version: 5.0.0
 description: Bot 对话数据自动采集器。实时采集用户与 Bot 的对话数据，识别纠错信号、满意度、意图分类，写入 L1/L2 数据层。
 author: 陈磊 / 小炸弹 💣
 tags: [bot, analytics, data-collection, quality-monitor]

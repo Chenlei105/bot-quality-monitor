@@ -1,6 +1,6 @@
 ---
 name: bot-platform-insights
-version: 3.0.0
+version: 5.0.0
 description: Bot 平台级洞察与 Skill 优化引擎。生成全平台健康看板、Skill ROI 评分、多 Skill 编排推荐，支持 Skill 自我迭代。
 author: 陈磊 / 小炸弹 💣
 tags: [bot, analytics, platform, skill-roi, optimization, quality-monitor]
