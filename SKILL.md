@@ -15,9 +15,10 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 
 ### 1. 安装与创建数据表
 
-**安装 Skill**:
-- 用户说: "帮我安装 bot-quality-monitor"
-- 用户说: "找一下 bot-quality-monitor 技能"
+**安装 Skill（从 GitHub）**:
+- 用户说: "帮我从 GitHub 安装 https://github.com/Chenlei105/bot-quality-monitor"
+- 用户说: "安装 Chenlei105/bot-quality-monitor"
+- ⚠️ 必须指定 GitHub，否则会去 SkillHub/ClawHub
 
 **创建数据表**:
 - 用户说: "帮我创建 Bot 质量监控数据表"
@@ -42,20 +43,28 @@ description: Bot 健康监控系统。当用户提到"质量监控"、"健康度
 
 ## 命令响应
 
-### 命令 0: 安装 Skill（首次使用）
+### 命令 0: 安装 Skill（首次使用，从 GitHub）
 
-**触发语句**: "帮我安装 bot-quality-monitor" 或 "找一下 bot-quality-monitor 技能"
+**触发语句**: 
+- "帮我从 GitHub 安装 https://github.com/Chenlei105/bot-quality-monitor"
+- "安装 Chenlei105/bot-quality-monitor"
+
+⚠️ **重要提示**:
+- 必须明确指定 **GitHub** 或 **完整 GitHub 链接**
+- ❌ 错误示例: "帮我安装 bot-quality-monitor"（会去 SkillHub/ClawHub）
+- ✅ 正确示例: "从 GitHub 安装 bot-quality-monitor"
 
 **执行流程**:
-1. Bot 自动从 GitHub 下载 Skill
+1. Bot 自动从 GitHub 克隆仓库
 2. 安装到 `~/.openclaw/workspace/skills/bot-quality-monitor/`
 3. 回复安装成功
 
 **回复格式**:
 ```
-✅ Skill 已安装: bot-quality-monitor v5.0
+✅ Skill 已从 GitHub 安装: bot-quality-monitor v5.0
 
 📦 安装位置: ~/.openclaw/workspace/skills/bot-quality-monitor/
+🔗 GitHub: https://github.com/Chenlei105/bot-quality-monitor
 
 🎯 下一步: 发送 "帮我创建 Bot 质量监控数据表" 创建监控表格
 ```

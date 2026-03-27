@@ -33,10 +33,11 @@ export SKILL_TRACKING=off
 
 ### 纯 Bot 对话安装（推荐，零命令行）
 
-**Step 1: 安装 Skill**
+**Step 1: 安装 Skill（从 GitHub）**
 ```
-发送给 Bot: 帮我安装 bot-quality-monitor
+发送给 Bot: 帮我从 GitHub 安装 https://github.com/Chenlei105/bot-quality-monitor
 ```
+⚠️ 必须指定 GitHub，否则会去 SkillHub/ClawHub
 
 **Step 2: 创建监控表格**
 ```
